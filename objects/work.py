@@ -1,8 +1,6 @@
 from objects.drill import Drill
 from objects.barrel import Barrel
 from objects.template import Template
-import numpy as np
-
 
 
 from objects.loadable import Loadable
@@ -19,9 +17,9 @@ class Work(Loadable):
         self.template = template
 
     def validate(self):
-        if ( self.template.nb_copy * self.template.width*self.drill.diameter > self.barrel.perimeter ):
-            return false
-        if (self.template.height *self.drill.diameter > self.barrel.height):
-            return false
-        return true
+        if self.template.nb_copy * self.template.width*self.drill.diameter > self.barrel.perimeter:
+            return False
+        if self.template.height * self.drill.diameter > self.barrel.height:
+            return False
+        return True
 
