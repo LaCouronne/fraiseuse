@@ -9,7 +9,6 @@ class WorkManager:
         self.get_default_admin_conf()
         self.work_fields=('Longueur','Largeur','Nombre de copies','Diametre fut','Hauteur fut')
 
-
     def validate_work(self):
         pass
 
