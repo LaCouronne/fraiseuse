@@ -65,7 +65,6 @@ def do_work(barrel, drill, template):
     # Calculate width between two motif's x position
     motif_delta = barrel.perimeter / template.nb_copy
 
-
     # Motif  list setup
     motifs_int = list()
 

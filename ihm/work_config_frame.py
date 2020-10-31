@@ -1,9 +1,12 @@
 import tkinter as tk
+from tkinter import ttk
 
 from objects.work import Work
 from objects.drill import Drill
 from objects.barrel import Barrel
 from objects.template import Template
+
+from controllers import work_manager
 
 form_grid_pady = 10
 
@@ -91,6 +94,8 @@ class WorkConfigFrame(tk.Frame):
         sub_btn.grid(row=3, column=0, pady=form_grid_pady)
         save_btn.grid(row=3, column=1, pady=form_grid_pady)
 
+        self.progress = ttk.Progressbar(self, orient=tk.HORIZONTAL, length=100, mode='determinate')
+
     def get_work_from_parameters(self):
         barrel = Barrel(diameter=self.barrel_diameter_var.get(), height=self.barrel_height_var.get())
         template = Template(width=self.template_width_var.get(), height=self.template_height_var.get(), nb_copy=self.nb_copy_var.get())
@@ -105,9 +110,21 @@ class WorkConfigFrame(tk.Frame):
             self.pop_up_error(message)
         else:
             self.pop_up_validation(work)
+        self.destroy()
 
     def save_work(self):
-        pass
+        self.progress.grid(row=4, column=0, pady=form_grid_pady)
+        work_manager.do_work(
+            thread_function=work_manager.fake_work,
+            update_callback=self.update_progress,
+            check_delay=1
+        )
+
+    def update_progress(self, value):
+        self.progress["value"] = value
+
+        if value >= 100:
+            self.progress.grid_forget()
 
     def pop_up_validation(self, work):
         f_infos = tk.Toplevel()  # Popup -> Toplevel()
@@ -124,3 +141,4 @@ class WorkConfigFrame(tk.Frame):
         f_infos.transient(self.master)  # Réduction popup impossible
         f_infos.grab_set()  # Interaction avec fenetre jeu impossible
         self.master.wait_window(f_infos)
+
