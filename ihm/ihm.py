@@ -17,14 +17,21 @@ menubar.add_command(label="New job", command=None)
 menubar.add_command(label="Load job", command=None)
 root.config(menu=menubar)
 
-def pop_up_validation():
-    fInfos = tk.Toplevel()  # Popup -> Toplevel()
-    fInfos.title('Infos')
-    tk.Button(fInfos, text='Quitter', command=fInfos.destroy).pack(padx=10, pady=10)
-    fInfos.transient(root)  # Réduction popup impossible
-    fInfos.grab_set()  # Interaction avec fenetre jeu impossible
-    root.wait_window(fInfos)
+def pop_up_validation(work):
+    f_infos = tk.Toplevel()  # Popup -> Toplevel()
+    f_infos.title(str(work.drill.diameter))
+    tk.Button(f_infos, text='Quitter', command=f_infos.destroy).pack(padx=10, pady=10)
+    f_infos.transient(root)  # Réduction popup impossible
+    f_infos.grab_set()  # Interaction avec fenetre jeu impossible
+    root.wait_window(f_infos)
 
+def pop_up_error(text_message):
+    f_infos = tk.Toplevel()  # Popup -> Toplevel()
+    f_infos.title(text_message)
+    tk.Button(f_infos, text='Quitter', command=f_infos.destroy).pack(padx=10, pady=10)
+    f_infos.transient(root)  # Réduction popup impossible
+    f_infos.grab_set()  # Interaction avec fenetre jeu impossible
+    root.wait_window(f_infos)
 
 def get_work_from_parameters():
     barrel = Barrel(diameter=barrel_diameter_var.get(), height=barrel_height_var.get())
@@ -36,9 +43,10 @@ def get_work_from_parameters():
 
 def start_job():
     work = get_work_from_parameters()
-    command = popup
-    pop_up_validation()
-    validated = work.validate()
+    validated, message= work.validate()
+    if not validated:
+        pop_up_error(message)
+    pop_up_validation(work)
 
 
 def save_job():
