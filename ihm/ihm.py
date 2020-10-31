@@ -1,5 +1,8 @@
 import tkinter as tk
 
+from objects.work import Work
+from controllers.work_manager import WorkManager
+
 root = tk.Tk()
 root.title("First_Program")
 
@@ -12,8 +15,20 @@ menubar.add_command(label="Load job", command=None)
 root.config(menu=menubar)
 
 
-def test():
-    pass
+def get_work_from_parameters():
+    work = Work(_, _, _)
+
+    return work
+
+
+def start_job():
+    work = get_work_from_parameters()
+    validated = work.validate()
+
+
+def save_job():
+    work = get_work_from_parameters()
+    validated = work.validate()
 
 
 # Barrel form

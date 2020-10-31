@@ -1,16 +1,16 @@
 import dao_example as dao
 
 
+from objects.work import Work
+
+
 class WorkManager:
 
     def __init__(self):
         self.admin_conf = None
         self.work_conf = None
         self.get_default_admin_conf()
-        self.work_fields=('Longueur','Largeur','Nombre de copies','Diametre fut','Hauteur fut')
-
-    def validate_work(self):
-        pass
+        self.work_fields = ('Longueur','Largeur','Nombre de copies','Diametre fut','Hauteur fut')
 
     @classmethod
     def start_work(cls):

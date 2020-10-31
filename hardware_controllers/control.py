@@ -26,12 +26,15 @@ motorPins = (18, 23, 24, 25)    # define pins connected to four phase ABCD of st
 CCWStep = (0x01,0x02,0x04,0x08) # define power supply order for rotating anticlockwise 
 CWStep = (0x08,0x04,0x02,0x01)  # define power supply order for rotating clockwise
 
+
 def setup():    
     GPIO.setmode(GPIO.BOARD)       # use PHYSICAL GPIO Numbering
     for pin in motorPins:
         GPIO.setup(pin,GPIO.OUT)
-        
-# as for four phase stepping motor, four steps is a cycle. the function is used to drive the stepping motor clockwise or anticlockwise to take four steps    
+
+
+# As for four phase stepping motor, four steps is a cycle. the function is used to drive the stepping motor clockwise or
+# anticlockwise to take four steps
 def moveOnePeriod(direction,ms):    
     for j in range(0,4,1):      # cycle for power supply order
         for i in range(0,4,1):  # assign to each pin

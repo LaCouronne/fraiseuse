@@ -9,7 +9,8 @@ from objects.template import Template
 
 class IHM:
 
-    def error(self, message):
+    @staticmethod
+    def error(message):
         print('[ERROR] ' + message)
 
 
@@ -34,7 +35,7 @@ class Motif:
         return self.bool_exp(x, y)
 
 
-def work(barrel, drill, template):
+def do_work(barrel, drill, template):
 
     assert isinstance(barrel, Barrel)
     assert isinstance(drill, Drill)
