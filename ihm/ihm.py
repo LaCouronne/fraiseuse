@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 
 from objects.work import Work
 from objects.drill import Drill
@@ -16,18 +17,27 @@ menubar.add_command(label="New job", command=None)
 menubar.add_command(label="Load job", command=None)
 root.config(menu=menubar)
 
+def pop_up_validation():
+    fInfos = tk.Toplevel()  # Popup -> Toplevel()
+    fInfos.title('Infos')
+    tk.Button(fInfos, text='Quitter', command=fInfos.destroy).pack(padx=10, pady=10)
+    fInfos.transient(root)  # Réduction popup impossible
+    fInfos.grab_set()  # Interaction avec fenetre jeu impossible
+    root.wait_window(fInfos)
+
 
 def get_work_from_parameters():
     barrel = Barrel(diameter=barrel_diameter_var.get(), height=barrel_height_var.get())
     template = Template(width=template_width_var.get(), height=template_height_var.get(), nb_copy=nb_copy_var.get())
     drill = Drill(diameter=drill_diameter_var.get())
     work = Work(barrel=barrel, template=template, drill=drill)
-
     return work
 
 
 def start_job():
     work = get_work_from_parameters()
+    command = popup
+    pop_up_validation()
     validated = work.validate()
 
 
@@ -83,7 +93,7 @@ nb_copy_entry = tk.Entry(root, textvariable=nb_copy_var, font=('calibre', 10, 'n
 nb_copy_label.grid(row=7, column=0)
 nb_copy_entry.grid(row=7, column=1)
 
-# Drill form 
+# Drill form
 drill_label = tk.Label(root, text='Drill', font=('calibre', 15, 'bold'))
 drill_label.grid(row=8, column=0)
 
