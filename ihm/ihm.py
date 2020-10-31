@@ -14,6 +14,7 @@ def pop_up_validation(work):
     f_infos.grab_set()  # Interaction avec fenetre jeu impossible
     root.wait_window(f_infos)
 
+
 def pop_up_error(text_message):
     f_infos = tk.Toplevel()  # Popup -> Toplevel()
     f_infos.title(text_message)
@@ -21,6 +22,7 @@ def pop_up_error(text_message):
     f_infos.transient(root)  # Réduction popup impossible
     f_infos.grab_set()  # Interaction avec fenetre jeu impossible
     root.wait_window(f_infos)
+
 
 def get_work_from_parameters():
     barrel = Barrel(diameter=barrel_diameter_var.get(), height=barrel_height_var.get())
