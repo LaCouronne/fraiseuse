@@ -17,7 +17,7 @@ class Work(Loadable):
         self.template = template
 
     def validate(self):
-        if self.template.nb_copy * self.template.width*self.drill.diameter > self.barrel.perimeter:
+        if self.template.nb_copy * self.template.width * self.drill.diameter > self.barrel.perimeter:
             return False
         if self.template.height * self.drill.diameter > self.barrel.height:
             return False
