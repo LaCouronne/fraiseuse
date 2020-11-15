@@ -18,6 +18,7 @@ class WorkImageFrame(tk.Frame):
 
         self.label = tk.Label(self, text="Creating work matrix...")
         self.label.pack()
+        self.label_image = tk.Label(self)
 
         self.color_matrix = None
         self.validated_pixels = 0
@@ -38,9 +39,11 @@ class WorkImageFrame(tk.Frame):
         img_data = Image.fromarray(self.color_matrix)
         img_data = img_data.transpose(Image.ROTATE_90)
         img = ImageTk.PhotoImage(image=img_data.resize(img_size))
+        self.label.destroy()
 
-        self.label.configure(image=img)
-        self.label.image = img
+        self.label_image.configure(image=img)
+        self.label_image.image = img
+        self.label_image.pack()
 
         self.start()
 
@@ -81,5 +84,5 @@ class WorkImageFrame(tk.Frame):
         img_data = img_data.transpose(Image.ROTATE_90)
         img = ImageTk.PhotoImage(image=img_data.resize(img_size))
 
-        self.label.configure(image=img)
-        self.label.image = img
+        self.label_image.configure(image=img)
+        self.label_image.image = img
