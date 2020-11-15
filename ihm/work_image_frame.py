@@ -1,10 +1,10 @@
 import tkinter as tk
 import numpy
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageOps
 
 from controllers import work_manager
 
-img_size = (700, 500)
+img_size = (1000, 500)
 
 
 class WorkImageFrame(tk.Frame):
@@ -17,10 +17,17 @@ class WorkImageFrame(tk.Frame):
         self.pack(expand=True)
 
         self.label = tk.Label(self, text="Creating work matrix...")
+        self.label_image =tk.Label(self)
         self.label.pack()
 
         self.color_matrix = None
         self.validated_pixels = 0
+
+    def display_matrix_preview(self, matrix):
+        self.label.destroy()
+        self.start_button = tk.Button(text='Start', command=self.start()).pack()
+
+        self.display_matrix(matrix)
 
     def display_matrix(self, matrix):
 
@@ -37,11 +44,11 @@ class WorkImageFrame(tk.Frame):
 
         img_data = Image.fromarray(self.color_matrix)
         img_data = img_data.transpose(Image.ROTATE_90)
-        img = ImageTk.PhotoImage(image=img_data.resize(img_size))
+        img = ImageTk.PhotoImage(image=ImageOps.fit(img_data, img_size, Image.ANTIALIAS))
 
-        self.label.configure(image=img)
-        self.label.image = img
-
+        self.label_image.configure(image=img)
+        self.label_image.image = img
+        self.label_image.pack()
         self.start()
 
     def start(self):
@@ -79,7 +86,8 @@ class WorkImageFrame(tk.Frame):
 
         img_data = Image.fromarray(self.color_matrix)
         img_data = img_data.transpose(Image.ROTATE_90)
-        img = ImageTk.PhotoImage(image=img_data.resize(img_size))
+        img = ImageTk.PhotoImage(image=ImageOps.fit(img_data, img_size))
 
-        self.label.configure(image=img)
-        self.label.image = img
+        self.label_image.configure(image=img)
+        self.label_image.image = img
+

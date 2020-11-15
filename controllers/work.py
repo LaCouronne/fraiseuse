@@ -141,12 +141,12 @@ def __main__():
     barrel = Barrel(diameter=60., height=112.)
     drill = Drill(diameter=.5)
     template = Template(height=100., width=40., nb_copy=3)
-
+    print("a")
     matrix = do_work(barrel=barrel, drill=drill, template=template)
     array2 = np.array(matrix, dtype=np.uint8)
     new_image = Image.fromarray(array2)
     new_image = new_image.transpose(Image.ROTATE_90)    # Rotate 90° due to matrix orientation (top-bottom is x)
     new_image.show()
+    print("a")
 
-
-# __main__()
+__main__()
