@@ -80,3 +80,62 @@ def fake_work(work):
     progress += r
     completed = True
 
+def work(work):
+    global progress
+    global completed
+
+    value_in = 1
+    value_out = 1
+
+    #Mvt translation x x2 , translation z x2 , rotation x
+
+    #Est ce que la fraiseuse s eloigne  du point initial sur x
+    boolean_translation_x_positive = True
+
+    #coordonnées z max et z min
+    z_max = work.barrel.diameter + value_out
+    z_min = work.barrel.diameter - value_in
+
+
+    #Suppose que la fraiseuse est à la place initiale
+
+    z_actuel = 0
+    x_actuel = 0
+
+    #Init first pixel
+    previous_pixel = 0
+
+    #Pattern
+    for lines in work.matrix:
+
+        #forward or backward ?
+        if boolean_translation_x_positive:
+            for pixels in lines:
+                previous_pixel = move_to_next(previous_pixel,pixels)
+        else:
+            for pixels in reversed(lines):
+                previous_pixel = move_to_next(previous_pixel,pixels)
+
+
+
+
+
+
+
+    #End : retour init
+
+
+def move_to_next(previous_pixel,pixel):
+    #4 cases
+    #down to down
+    move_x(1,)
+
+    #down to up
+    #up to down
+    #up to up
+
+    #Line forwards, line backwards, next line (4Th case)
+    #First step, last step
+
+    return (pixel)
+
