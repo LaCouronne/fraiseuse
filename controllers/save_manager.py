@@ -7,7 +7,7 @@ from objects.template import Template
 from objects.drill import Drill
 from objects.work import Work
 
-save_dir = "../saves"
+save_dir = "saves"
 
 saves = {}
 

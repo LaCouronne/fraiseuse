@@ -25,7 +25,7 @@ class MainFrame(tk.Tk):
     def display_image_frame(self):
         self.current_frame.destroy()
         self.current_frame = WorkImageFrame(self)
-        work_manager.generate_matrix_thread(self.current_frame.display_matrix)
+        work_manager.generate_matrix_thread(self.current_frame.display_matrix_preview)
 
 
 MainFrame().mainloop()

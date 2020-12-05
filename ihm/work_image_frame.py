@@ -23,7 +23,23 @@ class WorkImageFrame(tk.Frame):
         self.color_matrix = None
         self.validated_pixels = 0
 
-    def display_matrix(self, matrix):
+        self.label.destroy()
+
+        self.label_image.configure(image=None)
+        self.label_image.image = None
+        self.label_image.pack()
+
+    def display_matrix(self):
+
+        img_data = Image.fromarray(self.color_matrix)
+        img_data = img_data.transpose(Image.ROTATE_90)
+        img_data = img_data.resize(img_size, resample=Image.BOX)
+        img = ImageTk.PhotoImage(image=img_data)
+
+        self.label_image.configure(image=img)
+        self.label_image.image = img
+
+    def display_matrix_preview(self, matrix):
 
         tmp = matrix.copy()
 
@@ -36,14 +52,7 @@ class WorkImageFrame(tk.Frame):
 
         self.color_matrix = numpy.array(matrix, dtype=numpy.uint8)
 
-        img_data = Image.fromarray(self.color_matrix)
-        img_data = img_data.transpose(Image.ROTATE_90)
-        img = ImageTk.PhotoImage(image=img_data.resize(img_size))
-        self.label.destroy()
-
-        self.label_image.configure(image=img)
-        self.label_image.image = img
-        self.label_image.pack()
+        self.display_matrix()
 
         self.start()
 
@@ -79,10 +88,4 @@ class WorkImageFrame(tk.Frame):
                 row += 1
 
         self.validated_pixels = value
-
-        img_data = Image.fromarray(self.color_matrix)
-        img_data = img_data.transpose(Image.ROTATE_90)
-        img = ImageTk.PhotoImage(image=img_data.resize(img_size))
-
-        self.label_image.configure(image=img)
-        self.label_image.image = img
+        self.display_matrix()
