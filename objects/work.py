@@ -7,8 +7,8 @@ from objects.motif import Motif
 from objects.loadable import Loadable
 
 
-motif_spacing_x = 5.
-motif_spacing_y = 5.
+motif_margin_x = 5.
+motif_margin_y = 5.
 
 
 class Work(Loadable):
@@ -43,9 +43,15 @@ class Work(Loadable):
         # Calculate drill/matrix accuracy
         pixel_size = self.drill.diameter / 2
 
+        def round_up(num):
+            return num + (num % pixel_size)
+
+        def pixelize(num):
+            return int(round_up(num) / pixel_size)
+
         # Define matrix size
-        nb_rows = int(self.barrel.perimeter // pixel_size + 1)
-        nb_columns = int(self.barrel.height // pixel_size + 1)
+        pixel_height = nb_rows = int(self.barrel.perimeter // pixel_size + 1)
+        pixel_width = nb_columns = int(self.barrel.height // pixel_size + 1)
 
         # Initialize matrix with base values
         default_pixel_value = 255
@@ -55,52 +61,46 @@ class Work(Loadable):
             for _ in range(nb_columns):
                 matrix[row].append(default_pixel_value)
 
-        # Calculate width between two motif's x position
-        motif_delta = self.barrel.perimeter / self.template.nb_copy
+        # Calculate motif values
+        motif_delta = (self.barrel.perimeter / self.template.nb_copy)
 
-        motif_outside_width = motif_delta - motif_spacing_x
-        motif_outside_height = self.barrel.height - (motif_spacing_y * 2)
+        motif_outset_width = motif_delta - motif_margin_y
+        motif_outset_height = self.barrel.height - (2 * motif_margin_y)
 
-        #
-        inset_width = (motif_outside_width - self.template.width) / 2
-        inset_height = (self.barrel.height - motif_outside_height) / 2
+        # Calculate motif pixelized values
+        motif_pixel_margin_x = pixelize(motif_margin_x)
+        motif_pixel_margin_y = pixelize(motif_margin_y)
+        motif_pixel_delta = pixelize(motif_delta)
 
-        # Motif  list setup
-        motifs_int = list()
+        motif_outset_pixel_width = motif_pixel_delta - motif_pixel_margin_x
+        motif_outset_pixel_height = pixel_height - (2 * motif_pixel_margin_y)
+
+        motif_padding_pixel_x = pixelize((motif_outset_width - self.template.width) / 2)
+        motif_padding_pixel_y = pixelize((motif_outset_height - self.template.height) / 2)
 
         for index in range(self.template.nb_copy):
-            # Calculate motif x position starting from 0
-            pos_x = index * motif_delta
 
-            # Calculate motif y position to center each motif vertically
-            pos_y = (self.barrel.height - self.template.height) / 2
+            outset_x_start = index * motif_pixel_delta
+            outset_x_end = outset_x_start + motif_outset_pixel_width
 
-            # Generate motif and motif validator
-            motif = Motif(pos_x=pos_x, pos_y=pos_y, template=self.template)
+            outset_y_start = motif_pixel_margin_y
+            outset_y_end = outset_y_start + motif_outset_pixel_height
 
-            def point_validator(x, y):
-                return (
-                    motif.pos_x <= x <= motif.pos_x + motif.template.width and
-                    motif.pos_y <= y <= motif.pos_y + motif.template.height
-                ) and not (
-                    motif.pos_x + inset_width <= x <= motif.pos_x + motif.template.width - inset_width and
-                    motif.pos_y + inset_height <= y <= motif.pos_y + motif.template.height - inset_height
-                )
+            inset_x_start = outset_x_start + motif_padding_pixel_x
+            inset_x_end = outset_x_end - motif_padding_pixel_x
 
-            motif.set_bool_exp(point_validator)
-            # Add motif to motifs list
-            motifs_int.append(motif)
+            inset_y_start = outset_y_start + motif_padding_pixel_y
+            inset_y_end = outset_y_end - motif_padding_pixel_y
 
-        # Iterate on each pixel
-        for pos_x in range(len(matrix)):
-            for pos_y in range(len(matrix[pos_x])):
+            # Drawing outset (0 = drilling)
+            for index_x in range(outset_x_start, outset_x_end):
+                for index_y in range(outset_y_start, outset_y_end):
+                    matrix[index_x][index_y] = 0
 
-                # For each pixel, iterate on each motif
-                for motif in motifs_int:
-
-                    # If pixel is in a motif, update pixel depth value
-                    if motif.check_point_in_motif(pos_x * pixel_size, pos_y * pixel_size):
-                        matrix[pos_x][pos_y] = 0
+            # Removing inset area (255 = no drilling)
+            for index_x in range(inset_x_start, inset_x_end):
+                for index_y in range(inset_y_start, inset_y_end):
+                    matrix[index_x][index_y] = 255
 
         self._matrix = matrix
         return matrix
