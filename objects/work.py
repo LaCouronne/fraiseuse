@@ -44,14 +44,14 @@ class Work(Loadable):
         pixel_size = self.drill.diameter / 2
 
         def round_up(num):
-            return num + (num % pixel_size)
+            return num - (num % pixel_size)
 
         def pixelize(num):
             return int(round_up(num) / pixel_size)
 
         # Define matrix size
-        pixel_height = nb_rows = int(self.barrel.perimeter // pixel_size + 1)
-        pixel_width = nb_columns = int(self.barrel.height // pixel_size + 1)
+        pixel_width = nb_rows = int(self.barrel.perimeter // pixel_size)
+        pixel_height = nb_columns = int(self.barrel.height // pixel_size)
 
         # Initialize matrix with base values
         default_pixel_value = 255
