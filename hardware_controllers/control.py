@@ -1,75 +1,154 @@
+# Main Python File for Testing Stepper motors with the TB 6600
 
-            
-#def loop():
- #   while True:
-#        direction=input('Direction 1 or 0, time and cycle number')
-#        dir_number=int(direction)
- #       ms=input('Ms, need to be higher than 3: ')
-  #      ms_number=int(ms)
-   #     steps=input('Number of steps, in program 512:')
-    #    steps_number=int(steps)
-     #   moveSteps(dir_number,ms_number,steps_number)  # rotating 360 deg clockwise, a total of 2048 steps in a circle, 512 cycles
-      #  time.sleep(0.5)
-       # moveSteps(0,3,512)  # rotating 360 deg anticlockwise
-        #time.sleep(0.5)
-#!/usr/bin/env python3
-########################################################################
-# Filename    : SteppingMotor.py
-# Description : Drive SteppingMotor
-# Author      : www.freenove.com
-# modification: 2019/12/27
-########################################################################
 import RPi.GPIO as GPIO
-import time 
+import time
+import curses
 
-motorPins = (18, 23, 24, 25)    # define pins connected to four phase ABCD of stepper motor
-CCWStep = (0x01,0x02,0x04,0x08) # define power supply order for rotating anticlockwise 
-CWStep = (0x08,0x04,0x02,0x01)  # define power supply order for rotating clockwise
+QUICKDELAY = 0.0003  # Change this depends on your stepper motor
+SLOWDELAY = 0.00045
+
+# Change wiring here for your axis (in GPIO)
+XDir = 6
+XStepPin = 13
+XEnable = 5
+
+YDir = 27
+YStepPin = 22
+YEnable = 17
+
+ZDir = 19
+ZStepPin = 4
+ZEnable = 26
+SERVOPIN = 12
 
 
-def setup():    
-    GPIO.setmode(GPIO.BOARD)       # use PHYSICAL GPIO Numbering
-    for pin in motorPins:
-        GPIO.setup(pin,GPIO.OUT)
+def motor_initialize(dir_pin, step_pin, en_pin):
+    GPIO.setup(dir_pin, GPIO.OUT)
+    GPIO.setup(step_pin, GPIO.OUT)
+    GPIO.setup(en_pin, GPIO.OUT)
+    GPIO.output(en_pin, GPIO.HIGH)
+    GPIO.setup(SERVOPIN, GPIO.OUT)
+
+    pass
 
 
-# As for four phase stepping motor, four steps is a cycle. the function is used to drive the stepping motor clockwise or
-# anticlockwise to take four steps
-def moveOnePeriod(direction,ms):    
-    for j in range(0,4,1):      # cycle for power supply order
-        for i in range(0,4,1):  # assign to each pin
-            if (direction == 1):# power supply order clockwise
-                GPIO.output(motorPins[i],((CCWStep[j] == 1<<i) and GPIO.HIGH or GPIO.LOW))
-            else :              # power supply order anticlockwise
-                GPIO.output(motorPins[i],((CWStep[j] == 1<<i) and GPIO.HIGH or GPIO.LOW))
-        if(ms<3):       # the delay can not be less than 3ms, otherwise it will exceed speed limit of the motor
-            ms = 3
-        time.sleep(ms*0.001)    
-        
-# continuous rotation function, the parameter steps specifies the rotation cycles, every four steps is a cycle
-def moveSteps(direction, ms, steps):
-    for i in range(steps):
-        moveOnePeriod(direction, ms)
-        
-# function used to stop motor
-def motorStop():
-    for i in range(0,4,1):
-        GPIO.output(motorPins[i],GPIO.LOW)
-            
-def loop():
-    while True:
-        moveSteps(1,3,512)  # rotating 360 deg clockwise, a total of 2048 steps in a circle, 512 cycles
-        time.sleep(0.5)
-        moveSteps(0,3,512)  # rotating 360 deg anticlockwise
-        time.sleep(0.5)
+def pulse_y_cw():
+    for i in range(1000):
+        GPIO.output(YDir, 0)
+        GPIO.output(YStepPin, 1)
+        time.sleep(delay)
+        GPIO.output(YStepPin, 0)
+        time.sleep(delay)
+        print("Moving Y CW \n")
+    pass
 
-def destroy():
-    GPIO.cleanup()             # Release resource
 
-if __name__ == '__main__':     # Program entrance
-    print ('Program is starting...')
-    setup()
-    try:
-        loop()
-    except KeyboardInterrupt:  # Press ctrl-c to end the program.
-        destroy()
+def pulse_y_ccw():
+    for i in range(1000):
+        GPIO.output(YDir, 1)
+        GPIO.output(YStepPin, 1)
+        time.sleep(delay)
+        GPIO.output(YStepPin, 0)
+        time.sleep(delay)
+        print("Moving Y CCW \n")
+    pass
+
+
+def pulse_x_cw():
+    for i in range(5000):
+        GPIO.output(XDir, 0)
+        GPIO.output(XStepPin, 1)
+        time.sleep(delay)
+        GPIO.output(XStepPin, 0)
+        time.sleep(delay)
+        print("Moving X CCW \n")
+    pass
+
+
+def pulse_x_ccw():
+    for i in range(5000):
+        GPIO.output(XDir, 1)
+        GPIO.output(XStepPin, 1)
+        time.sleep(delay)
+        GPIO.output(XStepPin, 0)
+        time.sleep(delay)
+        print("Moving X CCW \n")
+    pass
+
+
+def pulse_z_cw():
+    for i in range(100):
+        GPIO.output(ZDir, 0)
+        GPIO.output(ZStepPin, 1)
+        time.sleep(SLOWDELAY)
+        GPIO.output(ZStepPin, 0)
+        time.sleep(SLOWDELAY)
+        print("Moving Z CW \n")
+    pass
+
+
+def pulse_z_ccw():
+    for i in range(50):
+        GPIO.output(ZDir, 1)
+        GPIO.output(ZStepPin, 1)
+        time.sleep(SLOWDELAY)
+        GPIO.output(ZStepPin, 0)
+        time.sleep(SLOWDELAY)
+        print("Moving Z CCW \n")
+    pass
+
+
+def servo_left():
+    global p
+    p.ChangeDutyCycle(2.5)
+
+
+def servo_right():
+    global p
+    p.ChangeDutyCycle(11.5)
+
+
+def servo_stop():
+    global p
+    p.ChangeDutyCycle(7)
+
+
+delay = QUICKDELAY
+
+screen = curses.initscr()
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+motor_initialize(XDir, XStepPin, XEnable)
+motor_initialize(YDir, YStepPin, YEnable)
+motor_initialize(ZDir, ZStepPin, ZEnable)
+p = GPIO.PWM(SERVOPIN, 50)
+p.start(5)
+print("Initialized. Use the following keys for control\n")
+print("WASD: controlling X and Y motors\n")
+print("  QE: raising and lowering Z motor\n")
+print("   X: to quit the program\n")
+
+while True:
+    c = screen.getch()
+    time.sleep(0.03)
+    if c == ord('w'):
+        pulse_x_ccw()
+    elif c == ord('s'):
+        pulse_x_cw()
+    elif c == ord('a'):
+        pulse_y_ccw()
+    elif c == ord('d'):
+        pulse_y_cw()
+    elif c == ord('q'):
+        pulse_z_ccw()
+    elif c == ord('e'):
+        pulse_z_cw()
+    elif c == ord('z'):
+        servo_left()
+    elif c == ord('c'):
+        servo_right()
+    elif c == ord('x'):
+        servo_stop()
+    elif c == ord('r'):
+        break  # Exit the while loop

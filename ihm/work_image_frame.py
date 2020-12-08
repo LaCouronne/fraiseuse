@@ -27,6 +27,7 @@ class WorkImageFrame(tk.Frame):
 
         self.label_image.configure(image=None)
         self.label_image.image = None
+        self.button = None
         self.label_image.pack()
 
     def display_matrix(self):
@@ -53,10 +54,12 @@ class WorkImageFrame(tk.Frame):
         self.color_matrix = numpy.array(matrix, dtype=numpy.uint8)
 
         self.display_matrix()
+        self.button = tk.Button(self, text='Start', command=self.start).pack()
 
-        self.start()
+
 
     def start(self):
+
         work_manager.do_work(update_callback=self.update_progress, callback=self.complete)
 
     def complete(self):
