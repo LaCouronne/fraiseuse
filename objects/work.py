@@ -28,7 +28,7 @@ class Work(Loadable):
                    "Il y a une erreur au niveau de la largeur,\n nombre de motif trop élevé ou epaisseur trop grande"
         if self.template.height > self.barrel.height:
             return False, \
-                   "Il y a une erreur au niveau de la hauteur,\n les motifs sont plus hhauts que le fut"
+                   "Il y a une erreur au niveau de la hauteur,\n les motifs sont plus hauts que le fut"
         return True, None
 
     @property
@@ -41,7 +41,7 @@ class Work(Loadable):
     def generate_matrix(self):
 
         # Calculate drill/matrix accuracy
-        pixel_size = self.drill.diameter / 2
+        pixel_size = self.drill.diameter
 
         def round_up(num):
             return num - (num % pixel_size)

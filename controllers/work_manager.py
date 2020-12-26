@@ -104,18 +104,25 @@ def work(work):
 
     #Init first pixel
     previous_pixel = 0
-
+    fraiseuse_on()
+    move_y(3,False)
     #Pattern
     for lines in work.matrix:
 
         #forward or backward ?
         if boolean_translation_x_positive:
             for pixels in lines:
-                previous_pixel = move_to_next(previous_pixel,pixels)
+                previous_pixel = move_to_next(previous_pixel,pixels,boolean_translation_x_positive, work.drill.diameter)
+            boolean_translation_x_positive = False
+
         else:
             for pixels in reversed(lines):
-                previous_pixel = move_to_next(previous_pixel,pixels)
+                previous_pixel = move_to_next(previous_pixel,pixels,boolean_translation_x_positive,work.drill.diameter)
+            boolean_translation_x_positive = True
 
+        move_z(work.drill,work.barrel.diameter)
+
+    fraiseuse_off()
 
 
 
@@ -125,17 +132,21 @@ def work(work):
     #End : retour init
 
 
-def move_to_next(previous_pixel,pixel):
-    #4 cases
+def move_to_next(previous_pixel,pixel, direction, size_pixel):
+    # 4 cases
     #down to down
-    move_x(1,)
+    if previous_pixel == pixel:
+        move_x(size_pixel,direction)
 
     #down to up
-    #up to down
-    #up to up
+    if previous_pixel>pixel:
+        move_y(6,True)
+        move_x(size_pixel,direction)
 
-    #Line forwards, line backwards, next line (4Th case)
-    #First step, last step
+    #up to down
+    else:
+        move_x(size_pixel,direction)
+        move_y(6,False)
 
     return (pixel)
 
