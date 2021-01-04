@@ -4,13 +4,18 @@ import threading
 
 import concurrent.futures
 
-#from hardware_controllers import control
+from controllers.hardware_controler import HardwareController
 from objects.work import Work
 
 progress = 0
 abort = False
 completed = False
 current_work = None
+emergency_stop = False
+
+# Work status
+FORWARD = 1
+BACKWARD = -1
 
 
 def do_work(callback=None, update_callback=None, check_delay=0.1):
@@ -70,12 +75,15 @@ def generate_matrix_thread(callback):
 def fake_work(work):
     global progress
     global completed
+    global emergency_stop
 
     iterations = len(work.matrix) * len(work.matrix[0])
     p = iterations // 100
     r = iterations % 100
 
     for i in range(100):
+        if emergency_stop:
+            return
         time.sleep(0.1)
         progress += p
 
@@ -83,73 +91,46 @@ def fake_work(work):
     completed = True
 
 
-def work(work):
+def execute_work(work):
     global progress
     global completed
+    global emergency_stop
 
-    value_in = 1
-    value_out = 1
+    hw_controller = HardwareController(work)
 
-    #Mvt translation x x2 , translation z x2 , rotation x
+    direction = FORWARD
 
-    #Est ce que la fraiseuse s eloigne  du point initial sur x
-    boolean_translation_x_positive = True
-
-    #coordonnées z max et z min
-    z_max = work.barrel.diameter + value_out
-    z_min = work.barrel.diameter - value_in
-
-
-    #Suppose que la fraiseuse est à la place initiale
-
-    z_actuel = 0
-    x_actuel = 0
-
-    #Init first pixel
+    # Init first pixel
     previous_pixel = 0
-    fraiseuse_on()
-    move_y(3,False)
-    #Pattern
+    hw_controller.drill_on()
+
+    # Set drill to starting position
+    hw_controller.move_y(-0.5)
+
+    # Pattern
     for lines in work.matrix:
 
-        #forward or backward ?
-        if boolean_translation_x_positive:
-            for pixels in lines:
-                previous_pixel = move_to_next(previous_pixel,pixels,boolean_translation_x_positive, work.drill.diameter)
-            boolean_translation_x_positive = False
+        # forward or backward ?
+        for pixel in (lines if direction == FORWARD else reversed(lines)):
+            if emergency_stop:
+                hw_controller.drill_off()
+                return
+            # Same depth
+            if previous_pixel == pixel:
+                hw_controller.move_x(direction)
 
-        else:
-            for pixels in reversed(lines):
-                previous_pixel = move_to_next(previous_pixel,pixels,boolean_translation_x_positive,work.drill.diameter)
-            boolean_translation_x_positive = True
+            # down to up
+            if previous_pixel > pixel:
+                hw_controller.move_y(1)
+                hw_controller.move_x(direction)
 
-        move_z(work.drill,work.barrel.diameter)
+            # up to down
+            else:
+                hw_controller.move_x(direction)
+                hw_controller.move_y(-1)
+            previous_pixel = pixel
+        direction = BACKWARD if direction == FORWARD else FORWARD
 
-    fraiseuse_off()
+        hw_controller.move_z(1)
 
-
-
-
-
-
-    #End : retour init
-
-
-def move_to_next(previous_pixel,pixel, direction, size_pixel):
-    # 4 cases
-    #down to down
-    if previous_pixel == pixel:
-        move_x(size_pixel,direction)
-
-    #down to up
-    if previous_pixel>pixel:
-        move_y(6,True)
-        move_x(size_pixel,direction)
-
-    #up to down
-    else:
-        move_x(size_pixel,direction)
-        move_y(6,False)
-
-    return (pixel)
-
+    hw_controller.drill_off()

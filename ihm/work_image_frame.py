@@ -28,6 +28,7 @@ class WorkImageFrame(tk.Frame):
         self.label_image.configure(image=None)
         self.label_image.image = None
         self.button = None
+        self.emergency_stop_button = None
         self.label_image.pack()
 
     def display_matrix(self):
@@ -56,11 +57,15 @@ class WorkImageFrame(tk.Frame):
         self.display_matrix()
         self.button = tk.Button(self, text='Start', command=self.start).pack()
 
-
-
     def start(self):
 
         work_manager.do_work(update_callback=self.update_progress, callback=self.complete)
+        self.emergency_stop_button = tk.Button(self, text='Emergency Stop', command=self.emergency_stop).pack()
+
+    def emergency_stop(self):
+        work_manager.emergency_stop = True
+        tk.Label(self, text="Work Aborted !").pack()
+        tk.Button(self, text='OK', command=self.close).pack()
 
     def complete(self):
         tk.Label(self, text="Finished !").pack()
