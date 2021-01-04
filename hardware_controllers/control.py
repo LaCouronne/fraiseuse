@@ -21,16 +21,41 @@ ZStepPin = 4
 ZEnable = 26
 SERVOPIN = 12
 
+fraiseuse_pin = 16
+
+
+def fraiseuse_init():
+    GPIO.setup(fraiseuse_pin,GPIO.output)
+    pass
+
+
+def fraiseuse_on():
+    GPIO.output(fraiseuse_pin,GPIO.HIGH)
+    pass
+
+
+def fraiseuse_off():
+    GPIO.output(fraiseuse_pin,GPIO.LOW)
+    pass
+
 
 def motor_initialize(dir_pin, step_pin, en_pin):
     GPIO.setup(dir_pin, GPIO.OUT)
     GPIO.setup(step_pin, GPIO.OUT)
     GPIO.setup(en_pin, GPIO.OUT)
     GPIO.output(en_pin, GPIO.HIGH)
-    GPIO.setup(SERVOPIN, GPIO.OUT)
-
+    #GPIO.setup(SERVOPIN, GPIO.OUT)
     pass
 
+
+def lock_motor(en_pin):
+    GPIO.output(en_pin,GPIO.HIGH)
+    pass
+
+
+def unlock_motor(en_pin):
+    GPIO.output(en_pin, GPIO.LOW)
+    pass
 
 def pulse_y_cw():
     for i in range(1000):

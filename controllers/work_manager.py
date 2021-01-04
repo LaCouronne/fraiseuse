@@ -1,8 +1,10 @@
 import time
 import threading
 
+
 import concurrent.futures
 
+#from hardware_controllers import control
 from objects.work import Work
 
 progress = 0
@@ -79,6 +81,7 @@ def fake_work(work):
 
     progress += r
     completed = True
+
 
 def work(work):
     global progress
