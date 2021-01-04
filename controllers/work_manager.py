@@ -25,6 +25,7 @@ def do_work(callback=None, update_callback=None, check_delay=0.1):
     global progress
     global abort
     global completed
+    global emergency_stop
 
     progress = 0
     abort = False
@@ -83,6 +84,7 @@ def fake_work(work):
 
     for i in range(100):
         if emergency_stop:
+            emergency_stop = False
             return
         time.sleep(0.1)
         progress += p
@@ -113,6 +115,7 @@ def execute_work(work):
         # forward or backward ?
         for pixel in (lines if direction == FORWARD else reversed(lines)):
             if emergency_stop:
+                emergency_stop = False
                 hw_controller.drill_off()
                 return
             # Same depth
