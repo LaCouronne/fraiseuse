@@ -5,7 +5,7 @@ from objects.work import Work
 from objects.drill import Drill
 from objects.barrel import Barrel
 from objects.template import Template
-
+from objects.margin import Margin
 from controllers import work_manager, save_manager
 
 form_grid_pady = 10
@@ -98,11 +98,35 @@ class WorkConfigFrame(tk.Frame):
         drill_diameter_entry.grid(row=1, column=1)
         drill_diameter_units_label.grid(row=1, column=2)
 
+        # Margin form
+        margin_frame = tk.Frame(self.form_frame)
+        margin_frame.grid(row=4, column=0, pady=form_grid_pady)
+
+        drill_label = tk.Label(margin_frame, text='Margin', font=('calibre', 15, 'bold'))
+        drill_label.grid(row=0, column=0)
+
+        self.margin_x = tk.DoubleVar()
+        margin_x_label = tk.Label(margin_frame, text='Margin X', font=('calibre', 10, 'bold'))
+        margin_x_entry = tk.Entry(margin_frame, textvariable=self.margin_x,
+                                        font=('calibre', 10, 'normal'))
+        margin_x_unit_label = tk.Label(margin_frame, text='mm', font=('calibre', 10))
+        margin_x_label.grid(row=1, column=0, padx=10)
+        margin_x_entry.grid(row=1, column=1)
+        margin_x_unit_label.grid(row=1, column=2)
+
+        self.margin_y = tk.DoubleVar()
+        margin_y_label = tk.Label(margin_frame, text='Margin X', font=('calibre', 10, 'bold'))
+        margin_y_entry = tk.Entry(margin_frame, textvariable=self.margin_y,
+                                  font=('calibre', 10, 'normal'))
+        margin_y_unit_label = tk.Label(margin_frame, text='mm', font=('calibre', 10))
+        margin_y_label.grid(row=2, column=0, padx=10)
+        margin_y_entry.grid(row=2, column=1)
+        margin_y_unit_label.grid(row=2, column=2)
         # Options
         self.save_name = tk.StringVar()
         preview_btn = tk.Button(self.form_frame, text='Preview', command=self.preview)
 
-        preview_btn.grid(row=3, column=0, pady=form_grid_pady)
+        preview_btn.grid(row=6, column=0, pady=form_grid_pady)
 
         # Save Frame
         self.label = tk.Label(self.save_frame, text="Saved configs", font=('calibre', 15, 'bold'))
@@ -139,8 +163,9 @@ class WorkConfigFrame(tk.Frame):
         barrel = Barrel(diameter=self.barrel_diameter_var.get(), height=self.barrel_height_var.get())
         template = Template(width=self.template_width_var.get(), height=self.template_height_var.get(), nb_copy=self.nb_copy_var.get())
         drill = Drill(diameter=self.drill_diameter_var.get())
+        margin = Margin(margin_x=self.margin_x.get(), margin_y=self.margin_y.get())
 
-        work = Work(barrel=barrel, template=template, drill=drill)
+        work = Work(barrel=barrel, template=template, drill=drill, margin=margin)
 
         return work
 

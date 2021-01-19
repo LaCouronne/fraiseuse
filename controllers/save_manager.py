@@ -6,6 +6,7 @@ from objects.barrel import Barrel
 from objects.template import Template
 from objects.drill import Drill
 from objects.work import Work
+from objects.margin import Margin
 
 save_dir = "saves"
 
@@ -28,6 +29,10 @@ def load_saves():
                 ),
                 drill=Drill(
                     diameter=save.get("drill_diameter"),
+                ),
+                margin=Margin(
+                    margin_x=save.get("margin_x"),
+                    margin_y=save.get("margin_y"),
                 )
             )
 
@@ -44,6 +49,8 @@ def save_work(name, work):
         "template_height": work.template.height,
         "template_nb_copy": work.template.nb_copy,
         "drill_diameter": work.drill.diameter,
+        "margin_x" : work.motif_margin_x,
+        "margin_y" : work.motif_margin_y
     }
 
     base_filename = slugify(name)

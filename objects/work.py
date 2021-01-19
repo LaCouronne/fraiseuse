@@ -2,25 +2,30 @@ from objects.drill import Drill
 from objects.barrel import Barrel
 from objects.template import Template
 from objects.motif import Motif
-
-
+from objects.margin import Margin
 from objects.loadable import Loadable
 
 
-motif_margin_x = 5.
-motif_margin_y = 5.
+#motif_margin_x = 5.
+#motif_margin_y = 5.
 
 
 class Work(Loadable):
 
-    def __init__(self, barrel, drill, template):
+    def __init__(self, barrel, drill, template,margin):
         assert isinstance(barrel, Barrel)
         assert isinstance(drill, Drill)
         assert isinstance(template, Template)
+        assert isinstance(margin, Margin)
+
         self.barrel = barrel
         self.drill = drill
         self.template = template
         self._matrix = None
+        self.margin = margin
+
+        self.motif_margin_x = margin.margin_x
+        self.motif_margin_y = margin.margin_y
 
     def validate(self):
         if self.template.nb_copy * self.template.width > self.barrel.perimeter:
@@ -29,6 +34,9 @@ class Work(Loadable):
         if self.template.height > self.barrel.height:
             return False, \
                    "Il y a une erreur au niveau de la hauteur,\n les motifs sont plus hauts que le fut"
+        if not self.drill.diameter > 0.:
+            return False, \
+                   "Il y a une erreur au niveau de la taille de la fraiseuse,\n celle ci doit etre positive"
         return True, None
 
     @property
@@ -64,12 +72,12 @@ class Work(Loadable):
         # Calculate motif values
         motif_delta = (self.barrel.perimeter / self.template.nb_copy)
 
-        motif_outset_width = motif_delta - motif_margin_y
-        motif_outset_height = self.barrel.height - (2 * motif_margin_y)
+        motif_outset_width = motif_delta - self.motif_margin_y
+        motif_outset_height = self.barrel.height - (2 * self.margin.margin_y)
 
         # Calculate motif pixelized values
-        motif_pixel_margin_x = pixelize(motif_margin_x)
-        motif_pixel_margin_y = pixelize(motif_margin_y)
+        motif_pixel_margin_x = pixelize(self.margin.margin_x)
+        motif_pixel_margin_y = pixelize(self.margin.margin_y)
         motif_pixel_delta = pixelize(motif_delta)
 
         motif_outset_pixel_width = motif_pixel_delta - motif_pixel_margin_x
