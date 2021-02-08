@@ -33,6 +33,7 @@ class WorkImageFrame(tk.Frame):
 
     def display_matrix(self):
 
+
         img_data = Image.fromarray(self.color_matrix)
         img_data = img_data.transpose(Image.ROTATE_90)
         img_data = img_data.resize(img_size, resample=Image.BOX)
@@ -51,18 +52,20 @@ class WorkImageFrame(tk.Frame):
             for column in range(len(matrix[0])):
                 val = matrix[row][column]/255
                 tmp[row][column] = [val * color_mask[0], val * color_mask[1], val * color_mask[2]]
-
         self.color_matrix = numpy.array(matrix, dtype=numpy.uint8)
-
         self.display_matrix()
-        self.button = tk.Button(self, text='Start', command=self.start).pack()
+        self.button = tk.Button(self, text='Start', command=self.start)
+        self.button.pack()
 
     def start(self):
-
+        self.button.pack_forget()
+        #self.button.destroy()
         work_manager.do_work(update_callback=self.update_progress, callback=self.complete)
-        self.emergency_stop_button = tk.Button(self, text='Emergency Stop', command=self.emergency_stop).pack()
+        self.emergency_stop_button = tk.Button(self, text='Emergency Stop', command=self.emergency_stop)
+        self.emergency_stop_button.pack()
 
     def emergency_stop(self):
+        self.emergency_stop_button.pack_forget()
         work_manager.emergency_stop = True
         tk.Label(self, text="Work Aborted !").pack()
         tk.Button(self, text='OK', command=self.close).pack()

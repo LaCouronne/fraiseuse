@@ -180,6 +180,8 @@ class WorkConfigFrame(tk.Frame):
         self.nb_copy_var.set(work.template.nb_copy)
 
         self.drill_diameter_var.set(work.drill.diameter)
+        self.margin_x.set(work.margin.margin_x)
+        self.margin_y.set(work.margin.margin_y)
 
     def preview(self):
         work_manager.current_work = self.get_work_from_parameters()

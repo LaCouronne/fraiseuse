@@ -12,7 +12,7 @@ from objects.loadable import Loadable
 
 class Work(Loadable):
 
-    def __init__(self, barrel, drill, template,margin):
+    def __init__(self, barrel, drill, template, margin):
         assert isinstance(barrel, Barrel)
         assert isinstance(drill, Drill)
         assert isinstance(template, Template)
@@ -47,7 +47,18 @@ class Work(Loadable):
             return self.generate_matrix()
 
     def generate_matrix(self):
+        """Summary line.
 
+           Extended description of function.
+
+           Args:
+               arg1 (int): Description of arg1
+               arg2 (str): Description of arg2
+
+           Returns:
+               bool: Description of return value
+
+           """
         # Calculate drill/matrix accuracy
         pixel_size = self.drill.diameter
 
@@ -58,7 +69,7 @@ class Work(Loadable):
             return int(round_up(num) / pixel_size)
 
         # Define matrix size
-        pixel_width = nb_rows = int(self.barrel.perimeter // pixel_size)
+        nb_rows = int(self.barrel.perimeter // pixel_size)
         pixel_height = nb_columns = int(self.barrel.height // pixel_size)
 
         # Initialize matrix with base values
@@ -113,5 +124,5 @@ class Work(Loadable):
         self._matrix = matrix
         return matrix
 
-    def save(self):
-        pass
+   # def save(self):
+    #    pass
