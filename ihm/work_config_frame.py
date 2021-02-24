@@ -35,11 +35,11 @@ class WorkConfigFrame(tk.Frame):
         barrel_frame = tk.Frame(self.form_frame)
         barrel_frame.grid(row=0, column=0, pady=form_grid_pady)
 
-        barrel_label = tk.Label(barrel_frame, text='Barrel', font=('calibre', 15, 'bold'))
+        barrel_label = tk.Label(barrel_frame, text='Fut', font=('calibre', 15, 'bold'))
         barrel_label.grid(row=0, column=0)
 
         self.barrel_diameter_var = tk.DoubleVar()
-        barrel_diameter_label = tk.Label(barrel_frame, text='Diameter', font=('calibre', 10, 'bold'))
+        barrel_diameter_label = tk.Label(barrel_frame, text='Diamètre', font=('calibre', 10, 'bold'))
         barrel_diameter_entry = tk.Entry(barrel_frame, textvariable=self.barrel_diameter_var, font=('calibre', 10, 'normal'))
         barrel_diameter_units_label = tk.Label(barrel_frame, text='mm', font=('calibre', 10))
         barrel_diameter_label.grid(row=1, column=0, padx=10)
@@ -47,7 +47,7 @@ class WorkConfigFrame(tk.Frame):
         barrel_diameter_units_label.grid(row=1, column=2)
 
         self.barrel_height_var = tk.DoubleVar()
-        barrel_height_label = tk.Label(barrel_frame, text='Height', font=('calibre', 10, 'bold'))
+        barrel_height_label = tk.Label(barrel_frame, text='Hauteur', font=('calibre', 10, 'bold'))
         barrel_height_entry = tk.Entry(barrel_frame, textvariable=self.barrel_height_var, font=('calibre', 10, 'normal'))
         barrel_height_units_label = tk.Label(barrel_frame, text='mm', font=('calibre', 10))
         barrel_height_label.grid(row=2, column=0, padx=10)
@@ -62,7 +62,7 @@ class WorkConfigFrame(tk.Frame):
         motif_label.grid(row=0, column=0)
 
         self.template_height_var = tk.DoubleVar()
-        template_height_label = tk.Label(motif_frame, text='Height', font=('calibre', 10, 'bold'))
+        template_height_label = tk.Label(motif_frame, text='Hauteur', font=('calibre', 10, 'bold'))
         template_height_entry = tk.Entry(motif_frame, textvariable=self.template_height_var, font=('calibre', 10, 'normal'))
         template_height_units_label = tk.Label(motif_frame, text='mm', font=('calibre', 10))
         template_height_label.grid(row=1, column=0, padx=10)
@@ -70,7 +70,7 @@ class WorkConfigFrame(tk.Frame):
         template_height_units_label.grid(row=1, column=2)
 
         self.template_width_var = tk.DoubleVar()
-        template_width_label = tk.Label(motif_frame, text='Width', font=('calibre', 10, 'bold'))
+        template_width_label = tk.Label(motif_frame, text='Largeur', font=('calibre', 10, 'bold'))
         template_width_entry = tk.Entry(motif_frame, textvariable=self.template_width_var, font=('calibre', 10, 'normal'))
         template_width_units_label = tk.Label(motif_frame, text='mm', font=('calibre', 10))
         template_width_label.grid(row=2, column=0, padx=10)
@@ -87,11 +87,11 @@ class WorkConfigFrame(tk.Frame):
         drill_frame = tk.Frame(self.form_frame)
         drill_frame.grid(row=2, column=0, pady=form_grid_pady)
 
-        drill_label = tk.Label(drill_frame, text='Drill', font=('calibre', 15, 'bold'))
+        drill_label = tk.Label(drill_frame, text='Fraiseuse', font=('calibre', 15, 'bold'))
         drill_label.grid(row=0, column=0)
 
         self.drill_diameter_var = tk.DoubleVar()
-        drill_diameter_label = tk.Label(drill_frame, text='Diameter', font=('calibre', 10, 'bold'))
+        drill_diameter_label = tk.Label(drill_frame, text='Diamètre', font=('calibre', 10, 'bold'))
         drill_diameter_entry = tk.Entry(drill_frame, textvariable=self.drill_diameter_var, font=('calibre', 10, 'normal'))
         drill_diameter_units_label = tk.Label(drill_frame, text='mm', font=('calibre', 10))
         drill_diameter_label.grid(row=1, column=0, padx=10)
@@ -102,11 +102,11 @@ class WorkConfigFrame(tk.Frame):
         margin_frame = tk.Frame(self.form_frame)
         margin_frame.grid(row=4, column=0, pady=form_grid_pady)
 
-        drill_label = tk.Label(margin_frame, text='Margin', font=('calibre', 15, 'bold'))
+        drill_label = tk.Label(margin_frame, text='Marge', font=('calibre', 15, 'bold'))
         drill_label.grid(row=0, column=0)
 
         self.margin_x = tk.DoubleVar()
-        margin_x_label = tk.Label(margin_frame, text='Margin X', font=('calibre', 10, 'bold'))
+        margin_x_label = tk.Label(margin_frame, text='Marge X', font=('calibre', 10, 'bold'))
         margin_x_entry = tk.Entry(margin_frame, textvariable=self.margin_x,
                                         font=('calibre', 10, 'normal'))
         margin_x_unit_label = tk.Label(margin_frame, text='mm', font=('calibre', 10))
@@ -115,7 +115,7 @@ class WorkConfigFrame(tk.Frame):
         margin_x_unit_label.grid(row=1, column=2)
 
         self.margin_y = tk.DoubleVar()
-        margin_y_label = tk.Label(margin_frame, text='Margin X', font=('calibre', 10, 'bold'))
+        margin_y_label = tk.Label(margin_frame, text='Marge y', font=('calibre', 10, 'bold'))
         margin_y_entry = tk.Entry(margin_frame, textvariable=self.margin_y,
                                   font=('calibre', 10, 'normal'))
         margin_y_unit_label = tk.Label(margin_frame, text='mm', font=('calibre', 10))
@@ -124,12 +124,12 @@ class WorkConfigFrame(tk.Frame):
         margin_y_unit_label.grid(row=2, column=2)
         # Options
         self.save_name = tk.StringVar()
-        preview_btn = tk.Button(self.form_frame, text='Preview', command=self.preview)
+        preview_btn = tk.Button(self.form_frame, text='Valider', command=self.preview)
 
         preview_btn.grid(row=6, column=0, pady=form_grid_pady)
 
         # Save Frame
-        self.label = tk.Label(self.save_frame, text="Saved configs", font=('calibre', 15, 'bold'))
+        self.label = tk.Label(self.save_frame, text="Paramètres sauvegardés", font=('calibre', 15, 'bold'))
         self.label.pack(side=tk.TOP, anchor="w")
 
         self.listbox = tk.Listbox(self.save_frame, width=400, selectmode=tk.SINGLE)
@@ -146,7 +146,7 @@ class WorkConfigFrame(tk.Frame):
 
         self.save_name_entry = tk.Entry(self.save_frame, textvariable=self.save_name, font=('calibre', 10, 'normal'))
         self.save_name_entry.pack(side=tk.LEFT)
-        self.save_button = tk.Button(self.save_frame, text='New Save', command=self.save_work)
+        self.save_button = tk.Button(self.save_frame, text='Nouvelle sauvegarde', command=self.save_work)
         self.save_button.pack(side=tk.LEFT)
 
     def load_work_params(self, val):
@@ -204,8 +204,9 @@ class WorkConfigFrame(tk.Frame):
 
     def pop_up_error(self, text_message):
         f_infos = tk.Toplevel()  # Popup -> Toplevel()
-        f_infos.title(text_message)
-        tk.Button(f_infos, text='Quitter', command=f_infos.destroy).pack(padx=10, pady=10)
+        f_infos.title("Erreur lors des contrôles")
+        tk.Label(f_infos,text=text_message, font=('calibre', 20, 'bold')).pack()
+        tk.Button(f_infos, text='Quitter', command=f_infos.destroy).pack(padx=20, pady=20)
         f_infos.transient(self.master)  # Réduction popup impossible
         f_infos.grab_set()  # Interaction avec fenetre jeu impossible
         self.master.wait_window(f_infos)

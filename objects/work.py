@@ -6,8 +6,8 @@ from objects.margin import Margin
 from objects.loadable import Loadable
 
 
-#motif_margin_x = 5.
-#motif_margin_y = 5.
+# motif_margin_x = 5.
+# motif_margin_y = 5.
 
 
 class Work(Loadable):
@@ -28,15 +28,21 @@ class Work(Loadable):
         self.motif_margin_y = margin.margin_y
 
     def validate(self):
-        if self.template.nb_copy * self.template.width > self.barrel.perimeter:
+        if self.template.nb_copy * (self.template.width + 2 * self.margin.margin_x) > self.barrel.perimeter:
             return False, \
-                   "Il y a une erreur au niveau de la largeur,\n nombre de motif trop élevé ou epaisseur trop grande"
-        if self.template.height > self.barrel.height:
+                   "Il y a une erreur au niveau de la largeur,\n le ombre de motif est trop élevé ou l\‘epaisseur est trop grande"
+        if self.template.height > self.barrel.height + 2 * self.margin.margin_y :
             return False, \
-                   "Il y a une erreur au niveau de la hauteur,\n les motifs sont plus hauts que le fut"
+                   "Il y a une erreur au niveau de la hauteur,\n les motifs sont plus longs que le dimètre du fut et de la marge"
+        if not self.margin.margin_y > 0.:
+            return False, \
+                   "Il y a une erreur au niveau de la taille de la fraiseuse,\n celle ci doit être positive"
+        if not self.margin.margin_x > 0.:
+            return False, \
+                   "Il y a une erreur au niveau de la marge X,\n celle ci doit être positive"
         if not self.drill.diameter > 0.:
             return False, \
-                   "Il y a une erreur au niveau de la taille de la fraiseuse,\n celle ci doit etre positive"
+                   "Il y a une erreur au niveau de la marge y,\n celle ci doit être positive"
         return True, None
 
     @property
@@ -124,5 +130,5 @@ class Work(Loadable):
         self._matrix = matrix
         return matrix
 
-   # def save(self):
-    #    pass
+# def save(self):
+#    pass
