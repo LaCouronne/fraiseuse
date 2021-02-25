@@ -34,7 +34,7 @@ class WorkImageFrame(tk.Frame):
     def display_matrix(self):
         img_data = Image.fromarray(self.color_matrix)
         img_data = img_data.transpose(Image.ROTATE_90)
-        img_data = img_data.resize(img_size, resample=Image.BOX)
+        img_data = img_data.resize(img_size, resample=Image.NEAREST)
         img = ImageTk.PhotoImage(image=img_data)
 
         self.label_image.configure(image=img)
