@@ -27,5 +27,3 @@ class MainFrame(tk.Tk):
         self.current_frame = WorkImageFrame(self)
         work_manager.generate_matrix_thread(self.current_frame.display_matrix_preview)
 
-
-MainFrame().mainloop()
