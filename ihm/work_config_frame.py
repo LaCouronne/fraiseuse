@@ -112,8 +112,7 @@ class WorkConfigFrame(tk.Frame):
 
         self.margin_x = tk.DoubleVar()
         margin_x_label = tk.Label(margin_frame, text='Marge X', font=('calibre', 10, 'bold'))
-        margin_x_entry = tk.Entry(margin_frame, textvariable=self.margin_x,
-                                        font=('calibre', 10, 'normal'))
+        margin_x_entry = tk.Entry(margin_frame, textvariable=self.margin_x, font=('calibre', 10, 'normal'))
         margin_x_unit_label = tk.Label(margin_frame, text='mm', font=('calibre', 10))
         margin_x_label.grid(row=1, column=0, padx=10)
         margin_x_entry.grid(row=1, column=1)
@@ -143,7 +142,7 @@ class WorkConfigFrame(tk.Frame):
         scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
         self.listbox.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=self.listbox.yview)
-        self.listbox.bind('<Double-1>', self.load_work_params)
+        self.listbox.bind('<<ListboxSelect>>', self.load_work_params)
 
         save_manager.load_saves()
         for save_name in save_manager.saves.keys():
@@ -169,7 +168,7 @@ class WorkConfigFrame(tk.Frame):
 
     def load_work_params(self, val):
 
-        save_name = str((self.listbox.get(tk.ACTIVE)))
+        save_name = str(self.listbox.get(tk.ANCHOR))
 
         work = save_manager.saves[save_name]
 
