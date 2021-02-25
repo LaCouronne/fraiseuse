@@ -129,7 +129,7 @@ class WorkConfigFrame(tk.Frame):
         margin_y_unit_label.grid(row=2, column=2)
         # Options
         self.save_name = tk.StringVar()
-        preview_btn = tk.Button(self.form_frame, text='Valider', command=self.preview)
+        preview_btn = tk.Button(self.form_frame, text='Valider', command=self.preview,  height = 5, width = 10)
 
         preview_btn.grid(row=6, column=0, pady=form_grid_pady)
 
@@ -153,7 +153,7 @@ class WorkConfigFrame(tk.Frame):
         self.save_name_entry.bind('<FocusIn>', self.display_keyboard)
 
         self.save_name_entry.pack(side=tk.LEFT)
-        self.save_button = tk.Button(self.save_frame, text='Nouvelle sauvegarde', command=self.save_work)
+        self.save_button = tk.Button(self.save_frame, text='Nouvelle sauvegarde', command=self.save_work,height = 5, width = 15)
         self.save_button.pack(side=tk.LEFT)
 
     def keyboard_destroyed(self, event):
