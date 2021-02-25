@@ -1,6 +1,8 @@
 import tkinter as tk
 import tkinter.ttk
 
+from ihm.keyboard import Keyboard
+
 from objects.work import Work
 from objects.drill import Drill
 from objects.barrel import Barrel
@@ -19,6 +21,9 @@ class WorkConfigFrame(tk.Frame):
 
         # Container frame
         self.pack(expand=True)
+
+        # Popup keyboard
+        self.keyboard = None
 
         # Form frame
         self.form_frame = tk.Frame(self)
@@ -145,9 +150,22 @@ class WorkConfigFrame(tk.Frame):
             self.listbox.insert(tk.END, save_name)
 
         self.save_name_entry = tk.Entry(self.save_frame, textvariable=self.save_name, font=('calibre', 10, 'normal'))
+        self.save_name_entry.bind('<FocusIn>', self.display_keyboard)
+
         self.save_name_entry.pack(side=tk.LEFT)
         self.save_button = tk.Button(self.save_frame, text='Nouvelle sauvegarde', command=self.save_work)
         self.save_button.pack(side=tk.LEFT)
+
+    def keyboard_destroyed(self, event):
+        self.focus()
+        self.keyboard = None
+
+    def display_keyboard(self, event):
+        if self.keyboard:
+            self.keyboard.quit()
+        self.keyboard = Keyboard(event.widget)
+        self.keyboard.bind('<Destroy>', self.keyboard_destroyed)
+        self.keyboard.mainloop()
 
     def load_work_params(self, val):
 
