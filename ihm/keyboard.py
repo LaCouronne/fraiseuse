@@ -1,17 +1,11 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-from pynput.keyboard import Key, Controller
 import string
 
 from functools import partial
 
 letters = list(string.ascii_uppercase)
 numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-# style = ttk.Style()
-# style.configure("W.TButton", font=("calibri", 10, "bold"), foreground="red", background="black")
-#
-# typer = Controller()
 
 
 class Keyboard(tk.Tk):
