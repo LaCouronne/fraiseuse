@@ -66,7 +66,6 @@ def generate_matrix_thread(callback):
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future = executor.submit(current_work.generate_matrix)
             return_value = future.result()
-            print (return_value)
             # Call callback function with generated matrix
             callback(return_value)
 
