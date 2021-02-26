@@ -12,8 +12,8 @@ from controllers import work_manager, save_manager
 
 form_grid_pady = 10
 
-font_size_small = 15
-font_size = 20
+font_size_small = 12
+font_size = 16
 
 
 class WorkConfigFrame(tk.Frame):
@@ -185,17 +185,18 @@ class WorkConfigFrame(tk.Frame):
     def display_keyboard(self, *args, **kwargs):
         if self.keyboard:
             self.keyboard.quit()
-        target = None
-        if len(args) and isinstance(args[0], tk.Event) and isinstance(args[0].widget, tk.Entry):
-            target = args[0].widget
-        elif len(args) and isinstance(args[0], tk.Entry):
-            target = args[0]
-        elif self.focus_get() and isinstance(self.focus_get(), tk.Entry):
-            target = self.focus_get()
+        else:
+            target = None
+            if len(args) and isinstance(args[0], tk.Event) and isinstance(args[0].widget, tk.Entry):
+                target = args[0].widget
+            elif len(args) and isinstance(args[0], tk.Entry):
+                target = args[0]
+            elif self.focus_get() and isinstance(self.focus_get(), tk.Entry):
+                target = self.focus_get()
 
-        self.keyboard = Keyboard(target)
-        self.keyboard.bind('<Destroy>', self.keyboard_destroyed)
-        self.keyboard.mainloop()
+            self.keyboard = Keyboard(target)
+            self.keyboard.bind('<Destroy>', self.keyboard_destroyed)
+            self.keyboard.mainloop()
 
     def load_work_params(self, val):
 
