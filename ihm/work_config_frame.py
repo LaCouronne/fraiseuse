@@ -43,7 +43,7 @@ class WorkConfigFrame(tk.Frame):
         barrel_label = tk.Label(barrel_frame, text='Fut', font=('calibre', 15, 'bold'))
         barrel_label.grid(row=0, column=0)
 
-        self.barrel_diameter_var = tk.DoubleVar()
+        self.barrel_diameter_var = tk.StringVar()
         barrel_diameter_label = tk.Label(barrel_frame, text='Diamètre', font=('calibre', 10, 'bold'))
         barrel_diameter_entry = tk.Entry(barrel_frame, textvariable=self.barrel_diameter_var, font=('calibre', 10, 'normal'))
         barrel_diameter_units_label = tk.Label(barrel_frame, text='mm', font=('calibre', 10))
@@ -51,7 +51,7 @@ class WorkConfigFrame(tk.Frame):
         barrel_diameter_entry.grid(row=1, column=1)
         barrel_diameter_units_label.grid(row=1, column=2)
 
-        self.barrel_height_var = tk.DoubleVar()
+        self.barrel_height_var = tk.StringVar()
         barrel_height_label = tk.Label(barrel_frame, text='Hauteur', font=('calibre', 10, 'bold'))
         barrel_height_entry = tk.Entry(barrel_frame, textvariable=self.barrel_height_var, font=('calibre', 10, 'normal'))
         barrel_height_units_label = tk.Label(barrel_frame, text='mm', font=('calibre', 10))
@@ -66,7 +66,7 @@ class WorkConfigFrame(tk.Frame):
         motif_label = tk.Label(motif_frame, text='Motif', font=('calibre', 15, 'bold'))
         motif_label.grid(row=0, column=0)
 
-        self.template_height_var = tk.DoubleVar()
+        self.template_height_var = tk.StringVar()
         template_height_label = tk.Label(motif_frame, text='Hauteur', font=('calibre', 10, 'bold'))
         template_height_entry = tk.Entry(motif_frame, textvariable=self.template_height_var, font=('calibre', 10, 'normal'))
         template_height_units_label = tk.Label(motif_frame, text='mm', font=('calibre', 10))
@@ -74,7 +74,7 @@ class WorkConfigFrame(tk.Frame):
         template_height_entry.grid(row=1, column=1)
         template_height_units_label.grid(row=1, column=2)
 
-        self.template_width_var = tk.DoubleVar()
+        self.template_width_var = tk.StringVar()
         template_width_label = tk.Label(motif_frame, text='Largeur', font=('calibre', 10, 'bold'))
         template_width_entry = tk.Entry(motif_frame, textvariable=self.template_width_var, font=('calibre', 10, 'normal'))
         template_width_units_label = tk.Label(motif_frame, text='mm', font=('calibre', 10))
@@ -82,7 +82,7 @@ class WorkConfigFrame(tk.Frame):
         template_width_entry.grid(row=2, column=1)
         template_width_units_label.grid(row=2, column=2)
 
-        self.nb_copy_var = tk.IntVar()
+        self.nb_copy_var = tk.StringVar()
         nb_copy_label = tk.Label(motif_frame, text='Iterations', font=('calibre', 10, 'bold'))
         nb_copy_entry = tk.Entry(motif_frame, textvariable=self.nb_copy_var, font=('calibre', 10, 'normal'))
         nb_copy_label.grid(row=3, column=0, padx=10)
@@ -95,7 +95,7 @@ class WorkConfigFrame(tk.Frame):
         drill_label = tk.Label(drill_frame, text='Fraiseuse', font=('calibre', 15, 'bold'))
         drill_label.grid(row=0, column=0)
 
-        self.drill_diameter_var = tk.DoubleVar()
+        self.drill_diameter_var = tk.StringVar()
         drill_diameter_label = tk.Label(drill_frame, text='Diamètre', font=('calibre', 10, 'bold'))
         drill_diameter_entry = tk.Entry(drill_frame, textvariable=self.drill_diameter_var, font=('calibre', 10, 'normal'))
         drill_diameter_units_label = tk.Label(drill_frame, text='mm', font=('calibre', 10))
@@ -110,7 +110,7 @@ class WorkConfigFrame(tk.Frame):
         drill_label = tk.Label(margin_frame, text='Marge', font=('calibre', 15, 'bold'))
         drill_label.grid(row=0, column=0)
 
-        self.margin_x = tk.DoubleVar()
+        self.margin_x = tk.StringVar()
         margin_x_label = tk.Label(margin_frame, text='Marge X', font=('calibre', 10, 'bold'))
         margin_x_entry = tk.Entry(margin_frame, textvariable=self.margin_x, font=('calibre', 10, 'normal'))
         margin_x_unit_label = tk.Label(margin_frame, text='mm', font=('calibre', 10))
@@ -118,7 +118,7 @@ class WorkConfigFrame(tk.Frame):
         margin_x_entry.grid(row=1, column=1)
         margin_x_unit_label.grid(row=1, column=2)
 
-        self.margin_y = tk.DoubleVar()
+        self.margin_y = tk.StringVar()
         margin_y_label = tk.Label(margin_frame, text='Marge y', font=('calibre', 10, 'bold'))
         margin_y_entry = tk.Entry(margin_frame, textvariable=self.margin_y,
                                   font=('calibre', 10, 'normal'))
@@ -170,21 +170,27 @@ class WorkConfigFrame(tk.Frame):
         self.keyboard.mainloop()
 
     def load_work_params(self, val):
-
         save_name = str(self.listbox.get(tk.ANCHOR))
-
         work = save_manager.saves[save_name]
-
         self.set_form_data(work)
 
     def get_work_from_parameters(self):
         # Create Work instance from form values
-        barrel = Barrel(diameter=self.barrel_diameter_var.get(), height=self.barrel_height_var.get())
+        string_barrel_diameter =str(self.barrel_diameter_var.get())
+        sting_barrel_height = str(self.barrel_height_var.get())
+        try:
+            float_barrel_diameter = float(string_barrel_diameter)
+            float_barrel_height= float(sting_barrel_height)
+        except ValueError as e:
+           self.pop_up_error(self, str(e))
+        barrel = Barrel(diameter=float_barrel_diameter, height=float_barrel_height)
+
         template = Template(width=self.template_width_var.get(), height=self.template_height_var.get(), nb_copy=self.nb_copy_var.get())
         drill = Drill(diameter=self.drill_diameter_var.get())
         margin = Margin(margin_x=self.margin_x.get(), margin_y=self.margin_y.get())
 
         work = Work(barrel=barrel, template=template, drill=drill, margin=margin)
+
 
         return work
 
