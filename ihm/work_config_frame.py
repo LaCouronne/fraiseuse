@@ -148,7 +148,7 @@ class WorkConfigFrame(tk.Frame):
         for save_name in save_manager.saves.keys():
             self.listbox.insert(tk.END, save_name)
 
-        self.save_name_entry = tk.Entry(self.save_frame, textvariable=self.save_name, font=('calibre', 12, 'normal'))
+        self.save_name_entry = tk.Entry(self.save_frame, textvariable=self.save_name, font=('calibre', 10, 'normal'))
         self.save_name_entry.bind('<FocusIn>', self.display_keyboard)
         self.save_name_entry.pack(side=tk.LEFT)
 
