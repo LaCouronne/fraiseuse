@@ -178,7 +178,7 @@ class WorkConfigFrame(tk.Frame):
     def onfocus(self, event):
         if self.keyboard and isinstance(event.widget, tk.Entry):
             self.keyboard.target = self.focus_get()
-            self.keyboard.focus_set()
+            self.keyboard.lift()
 
     def keyboard_destroyed(self, event):
         self.keyboard = None
