@@ -49,8 +49,8 @@ def save_work(name, work):
         "template_height": work.template.height,
         "template_nb_copy": work.template.nb_copy,
         "drill_diameter": work.drill.diameter,
-        "margin_x" : work.motif_margin_x,
-        "margin_y" : work.motif_margin_y
+        "margin_x": work.motif_margin_x,
+        "margin_y": work.motif_margin_y
     }
 
     base_filename = slugify(name)
@@ -59,15 +59,15 @@ def save_work(name, work):
 
     while True:
         try:
-            f = open(os.path.join(save_dir, filename))
-            f.close()
+            with open(os.path.join(save_dir, filename)) as f:
+                f.close()
             filename = f"{base_filename}_{suffix}.json"
             suffix += 1
 
         except FileNotFoundError:
             with open(os.path.join(save_dir, filename), 'w') as outfile:
                 json.dump(save, outfile)
-            saves[save.get('name')] = save
+            saves[save.get('name')] = work
             return
 
 
@@ -77,8 +77,9 @@ def delete_save(save_name):
     filename = base_filename + ".json"
 
     try:
-        f = open(os.path.join(save_dir, filename))
-        os.remove(filename)
+        with open(os.path.join(save_dir, filename)) as f:
+            f.close()
+        os.remove(os.path.join(save_dir, filename))
     except FileNotFoundError:
         return
 

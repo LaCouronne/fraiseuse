@@ -152,10 +152,10 @@ class WorkConfigFrame(tk.Frame):
         self.save_name_entry.bind('<FocusIn>', self.display_keyboard)
         self.save_name_entry.pack(side=tk.LEFT)
 
-        self.delete_button = tk.Button(self.save_frame, text='Supprimer sauvegarde', command=self.delete_work,height=5, width=15, wraplength=70)
+        self.delete_button = tk.Button(self.save_frame, text='Supprimer sauvegarde', command=self.delete_work,height=5, width=15, wraplength=80)
         self.delete_button.pack(side=tk.RIGHT)
 
-        self.save_button = tk.Button(self.save_frame, text='Nouvelle sauvegarde', command=self.save_work,height=5, width=15, wraplength=70)
+        self.save_button = tk.Button(self.save_frame, text='Nouvelle sauvegarde', command=self.save_work,height=5, width=15, wraplength=80)
         self.save_button.pack(side=tk.RIGHT)
 
     def keyboard_destroyed(self, event):
@@ -212,8 +212,9 @@ class WorkConfigFrame(tk.Frame):
             self.display_work_image()
 
     def save_work(self):
-        if self.save_name.get() in save_manager.saves.keys():
+        if not self.save_name.get() or self.save_name.get() in save_manager.saves.keys():
             return
+        self.keyboard.quit()
         work_manager.current_work = self.get_work_from_parameters()
         save_manager.save_work(self.save_name.get(), work_manager.current_work)
         self.listbox.insert(tk.END, self.save_name.get())
