@@ -49,7 +49,8 @@ def do_work(callback=None, update_callback=None, check_delay=0.1):
                 break
 
     threading.Thread(target=check_progress).start()
-    threading.Thread(target=fake_work, args=(current_work,)).start()
+    # threading.Thread(target=fake_work, args=(current_work,)).start()
+    threading.Thread(target=execute_work, args=(current_work,)).start()
 
 
 def generate_matrix_thread(callback):

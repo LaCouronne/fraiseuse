@@ -1,7 +1,7 @@
 
 import math
-#import RPi.GPIO as GPIO
 import time
+import sys
 pin_fraise = 10
 
 XDir = 13
@@ -19,7 +19,80 @@ ZEnable = 12
 motor_pulse_cycle = 6400
 motor_delay = 0.001
 
-#GPIO.setmode(GPIO.BOARD)
+try:
+    import RPi.GPIO as GPIO
+except ModuleNotFoundError:
+
+    class MockGPIO:
+
+        delta_time_limit = .5
+
+        motorx = {}
+        motory = {}
+        motorz = {}
+
+        BOARD = None
+        OUT = None
+        HIGH = None
+        LOW = None
+
+        @classmethod
+        def setup(cls, *args, **kwargs):
+            pass
+
+        @classmethod
+        def setmode(cls, *args, **kwargs):
+            pass
+
+        @classmethod
+        def output(cls, addr, val):
+
+            if cls.motorx.get("last_pulse_date") and time.time() > cls.motorx.get("last_pulse_date") + cls.delta_time_limit:
+                cls.motorx["status"] = 0
+            else:
+                cls.motorx["status"] = 1
+                
+            if cls.motory.get("last_pulse_date") and time.time() > cls.motory.get("last_pulse_date") + cls.delta_time_limit:
+                cls.motory["status"] = 0
+            else:
+                cls.motory["status"] = 1
+                
+            if cls.motorz.get("last_pulse_date") and time.time() > cls.motorz.get("last_pulse_date") + cls.delta_time_limit:
+                cls.motorz["status"] = 0
+            else:
+                cls.motorz["status"] = 1
+
+            if addr in [XDir, YDir, ZDir]:
+                if addr == XDir:
+                    cls.motorx["direction"] = val
+                if addr == YDir:
+                    cls.motory["direction"] = val
+                if addr == ZDir:
+                    cls.motorz["direction"] = val
+
+            if addr in [XStepPin, YStepPin, ZStepPin]:
+                if addr == XStepPin and val == 1:
+                    cls.motorx["last_pulse_date"] = time.time()
+                    cls.motorx["status"] = 1
+                if addr == YStepPin and val == 1:
+                    cls.motory["last_pulse_date"] = time.time()
+                    cls.motory["status"] = 1
+                if addr == ZStepPin and val == 1:
+                    cls.motorz["last_pulse_date"] = time.time()
+                    cls.motorz["status"] = 1
+
+            sys.stdout.write(
+                "[ Motor X: " + ("-" if not cls.motorx.get("status") else "→" if cls.motorx.get("direction") == 1 else "←") + " ] " +
+                "[ Motor Y: " + ("-" if not cls.motory.get("status") else "→" if cls.motory.get("direction") == 1 else "←") + " ] " +
+                "[ Motor Z: " + ("-" if not cls.motorz.get("status") else "→" if cls.motorz.get("direction") == 1 else "←") + " ] " +
+                "\r"
+            )
+            sys.stdout.flush()
+
+    GPIO = MockGPIO
+
+
+GPIO.setmode(GPIO.BOARD)
 
 
 class Motor:
@@ -29,17 +102,15 @@ class Motor:
         self.step = step_pin
         self.en = en_pin
 
-        # GPIO.setup(dir_pin, GPIO.OUT)
-        # GPIO.setup(step_pin, GPIO.OUT)
-        # GPIO.setup(en_pin, GPIO.OUT)
+        GPIO.setup(dir_pin, GPIO.OUT)
+        GPIO.setup(step_pin, GPIO.OUT)
+        GPIO.setup(en_pin, GPIO.OUT)
 
         #moteurs en flottement pour pouvoir le positionner
-        # GPIO.output(en_pin, GPIO.HIGH)
+        GPIO.output(en_pin, GPIO.HIGH)
 
 
 class HardwareController:
-
-
 
     drill_depth = 6
 
@@ -67,12 +138,11 @@ class HardwareController:
         diameter = self.work.barrel.diameter
         radius = diameter / 2
 
-        # # Send pulses for requested move
+        # Send pulses for requested move
         # for _ in range(abs(vector) * pixel_pulse):
         #     GPIO.output(self.motor_z.step, 1)
         #     time.sleep(motor_delay)
         #     GPIO.output(self.motor_z.step, 0)
-
 
         pass
 
@@ -87,9 +157,9 @@ class HardwareController:
 
         #Vector sign + => cw    - => ccw
         vector_sign = 1 if vector > 0 else 0
-        for _ in range(abs(vector) * pixel_pulse):
-            pass
-
+        # for _ in range(abs(vector) * pixel_pulse):
+        #     pass
+        #
         #     GPIO.output(self.motor_y.step, 1)
         #     time.sleep(motor_delay)
         #     GPIO.output(self.motor_y.step, 0)
@@ -118,11 +188,11 @@ class HardwareController:
 
         vector_sign = 1 if vector > 0 else 0
 
-        # # Set motor direction
-        # GPIO.output(self.motor_z.dir, vector_sign)
-        #
-        # # Send pulses for requested move
-        # for _ in range(abs(vector) * pixel_pulse):
-        #     GPIO.output(self.motor_z.step, 1)
-        #     time.sleep(motor_delay)
-        #     GPIO.output(self.motor_z.step, 0)
+        # Set motor direction
+        GPIO.output(self.motor_z.dir, vector_sign)
+
+        # Send pulses for requested move
+        for _ in range(abs(vector) * pixel_pulse):
+            GPIO.output(self.motor_z.step, 1)
+            time.sleep(motor_delay)
+            GPIO.output(self.motor_z.step, 0)
