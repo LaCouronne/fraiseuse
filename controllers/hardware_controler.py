@@ -81,13 +81,14 @@ except ModuleNotFoundError:
                     cls.motorz["last_pulse_date"] = time.time()
                     cls.motorz["status"] = 1
 
-            sys.stdout.write(
+            print(
+                "\r" +
                 "[ Motor X: " + ("-" if not cls.motorx.get("status") else "→" if cls.motorx.get("direction") == 1 else "←") + " ] " +
                 "[ Motor Y: " + ("-" if not cls.motory.get("status") else "→" if cls.motory.get("direction") == 1 else "←") + " ] " +
-                "[ Motor Z: " + ("-" if not cls.motorz.get("status") else "→" if cls.motorz.get("direction") == 1 else "←") + " ] " +
-                "\r"
+                "[ Motor Z: " + ("-" if not cls.motorz.get("status") else "→" if cls.motorz.get("direction") == 1 else "←") + " ] ",
+                end="",
+                flush=True
             )
-            sys.stdout.flush()
 
     GPIO = MockGPIO
 
