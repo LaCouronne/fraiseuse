@@ -71,6 +71,18 @@ def save_work(name, work):
             return
 
 
+def delete_save(save_name):
+
+    base_filename = save_name
+    filename = base_filename + ".json"
+
+    try:
+        f = open(os.path.join(save_dir, filename))
+        os.remove(filename)
+    except FileNotFoundError:
+        return
+
+
 non_url_safe = ['"', '#', '$', '%', '&', '+', ',', '/', ':', ';', '=', '?',  '@', '[', '\\', ']', '^', '`', '{', '|', '}', '~', "'"]
 non_url_safe_regex = re.compile(r'[{}]'.format(''.join(re.escape(x) for x in non_url_safe)))
 translate_table = {ord(char): u'' for char in non_url_safe}

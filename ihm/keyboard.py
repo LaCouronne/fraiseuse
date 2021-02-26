@@ -6,6 +6,9 @@ from functools import partial
 
 letters = list(string.ascii_uppercase)
 numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+keyboard_keys = letters
+keyboard_keys.extend(numbers)
+keyboard_keys.extend(['.', '-'])
 
 
 class Keyboard(tk.Tk):
@@ -20,7 +23,9 @@ class Keyboard(tk.Tk):
         self.attributes("-topmost", True)
         self.config(bg="black")
 
-        self.bind('<FocusOut>', self.quit)
+        # self.bind('<FocusOut>', self.quit)
+
+        last_index = 0
 
         for i, item in enumerate(letters):
             ttk.Button(
@@ -30,11 +35,34 @@ class Keyboard(tk.Tk):
                 style="W.TButton",
                 command=partial(self.type_key, item)
             ).grid(row=i // 7, column=i % 7)
+            last_index = i
 
-    def quit(self):
+        ttk.Button(
+            self,
+            text='⌫',
+            width=11,
+            style="W.TButton",
+            command=self.del_key
+        ).grid(row=last_index // 7, column=last_index % 7 + 1, columnspan=2)
+
+        last_index += 2
+
+        ttk.Button(
+            self,
+            text='⏎',
+            width=11,
+            style="W.TButton",
+            command=self.quit
+        ).grid(row=last_index // 7, column=last_index % 7 + 1, columnspan=2)
+
+    def quit(self, *args, **kwargs):
         self.focus()
         self.destroy()
 
     def type_key(self, key):
-        print(str(key))  # test line
         self.linked_input.insert(tk.INSERT, key)
+
+    def del_key(self, *args, **kwargs):
+        if len(self.linked_input.get()) <= 0:
+            return
+        self.linked_input.delete(len(self.linked_input.get())-1, tk.END)
