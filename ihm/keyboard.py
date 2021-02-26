@@ -20,7 +20,6 @@ class Keyboard(tk.Tk):
         super().__init__(*args, **kwargs)
 
         self.title("Virtual Keyboard")
-        self.attributes("-topmost", True)
         self.config(bg="black")
 
         self.target = target
@@ -52,6 +51,8 @@ class Keyboard(tk.Tk):
             style="W.TButton",
             command=self.quit
         ).grid(row=last_index // 7, column=last_index % 7 + 1, columnspan=2, sticky=tk.N+tk.S+tk.E+tk.W)
+
+        self.attributes("-topmost", True)
 
     def quit(self, *args, **kwargs):
         self.focus()
