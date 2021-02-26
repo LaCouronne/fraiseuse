@@ -53,6 +53,7 @@ class WorkConfigFrame(tk.Frame):
         self.barrel_diameter_var = tk.DoubleVar()
         barrel_diameter_label = tk.Label(barrel_frame, text='Diamètre', font=('calibre', font_size_small, 'bold'))
         barrel_diameter_entry = tk.Entry(barrel_frame, textvariable=self.barrel_diameter_var, font=('calibre', font_size_small, 'normal'))
+        barrel_diameter_entry.bind('<FocusIn>', self.onfocus)
         barrel_diameter_units_label = tk.Label(barrel_frame, text='mm', font=('calibre', font_size_small))
         barrel_diameter_label.grid(row=1, column=0, padx=10)
         barrel_diameter_entry.grid(row=1, column=1)
@@ -61,6 +62,7 @@ class WorkConfigFrame(tk.Frame):
         self.barrel_height_var = tk.DoubleVar()
         barrel_height_label = tk.Label(barrel_frame, text='Hauteur', font=('calibre', font_size_small, 'bold'))
         barrel_height_entry = tk.Entry(barrel_frame, textvariable=self.barrel_height_var, font=('calibre', font_size_small, 'normal'))
+        barrel_height_entry.bind('<FocusIn>', self.onfocus)
         barrel_height_units_label = tk.Label(barrel_frame, text='mm', font=('calibre', font_size_small))
         barrel_height_label.grid(row=2, column=0, padx=10)
         barrel_height_entry.grid(row=2, column=1)
@@ -76,6 +78,7 @@ class WorkConfigFrame(tk.Frame):
         self.template_height_var = tk.DoubleVar()
         template_height_label = tk.Label(motif_frame, text='Hauteur', font=('calibre', font_size_small, 'bold'))
         template_height_entry = tk.Entry(motif_frame, textvariable=self.template_height_var, font=('calibre', font_size_small, 'normal'))
+        template_height_entry.bind('<FocusIn>', self.onfocus)
         template_height_units_label = tk.Label(motif_frame, text='mm', font=('calibre', font_size_small))
         template_height_label.grid(row=1, column=0, padx=10)
         template_height_entry.grid(row=1, column=1)
@@ -84,6 +87,7 @@ class WorkConfigFrame(tk.Frame):
         self.template_width_var = tk.DoubleVar()
         template_width_label = tk.Label(motif_frame, text='Largeur', font=('calibre', font_size_small, 'bold'))
         template_width_entry = tk.Entry(motif_frame, textvariable=self.template_width_var, font=('calibre', font_size_small, 'normal'))
+        template_width_entry.bind('<FocusIn>', self.onfocus)
         template_width_units_label = tk.Label(motif_frame, text='mm', font=('calibre', font_size_small))
         template_width_label.grid(row=2, column=0, padx=10)
         template_width_entry.grid(row=2, column=1)
@@ -92,6 +96,7 @@ class WorkConfigFrame(tk.Frame):
         self.nb_copy_var = tk.IntVar()
         nb_copy_label = tk.Label(motif_frame, text='Iterations', font=('calibre', font_size_small, 'bold'))
         nb_copy_entry = tk.Entry(motif_frame, textvariable=self.nb_copy_var, font=('calibre', font_size_small, 'normal'))
+        nb_copy_entry.bind('<FocusIn>', self.onfocus)
         nb_copy_label.grid(row=3, column=0, padx=10)
         nb_copy_entry.grid(row=3, column=1)
 
@@ -105,6 +110,7 @@ class WorkConfigFrame(tk.Frame):
         self.drill_diameter_var = tk.DoubleVar()
         drill_diameter_label = tk.Label(drill_frame, text='Diamètre', font=('calibre', font_size_small, 'bold'))
         drill_diameter_entry = tk.Entry(drill_frame, textvariable=self.drill_diameter_var, font=('calibre', font_size_small, 'normal'))
+        drill_diameter_entry.bind('<FocusIn>', self.onfocus)
         drill_diameter_units_label = tk.Label(drill_frame, text='mm', font=('calibre', font_size_small))
         drill_diameter_label.grid(row=1, column=0, padx=10)
         drill_diameter_entry.grid(row=1, column=1)
@@ -120,6 +126,7 @@ class WorkConfigFrame(tk.Frame):
         self.margin_x = tk.DoubleVar()
         margin_x_label = tk.Label(margin_frame, text='Marge X', font=('calibre', font_size_small, 'bold'))
         margin_x_entry = tk.Entry(margin_frame, textvariable=self.margin_x, font=('calibre', font_size_small, 'normal'))
+        margin_x_entry.bind('<FocusIn>', self.onfocus)
         margin_x_unit_label = tk.Label(margin_frame, text='mm', font=('calibre', font_size_small))
         margin_x_label.grid(row=1, column=0, padx=10)
         margin_x_entry.grid(row=1, column=1)
@@ -128,6 +135,7 @@ class WorkConfigFrame(tk.Frame):
         self.margin_y = tk.DoubleVar()
         margin_y_label = tk.Label(margin_frame, text='Marge y', font=('calibre', font_size_small, 'bold'))
         margin_y_entry = tk.Entry(margin_frame, textvariable=self.margin_y, font=('calibre', font_size_small, 'normal'))
+        margin_y_entry.bind('<FocusIn>', self.onfocus)
         margin_y_unit_label = tk.Label(margin_frame, text='mm', font=('calibre', font_size_small))
         margin_y_label.grid(row=2, column=0, padx=10)
         margin_y_entry.grid(row=2, column=1)
@@ -155,7 +163,7 @@ class WorkConfigFrame(tk.Frame):
             self.listbox.insert(tk.END, save_name)
 
         self.save_name_entry = tk.Entry(self.save_frame, textvariable=self.save_name, font=('calibre', font_size_small, 'normal'))
-        self.save_name_entry.bind('<FocusIn>', self.display_keyboard)
+        self.save_name_entry.bind('<FocusIn>', self.onfocus)
         self.save_name_entry.pack(side=tk.LEFT, padx=5)
 
         self.delete_button = tk.Button(self.save_frame, text='Supprimer sauvegarde', command=self.delete_work, height=5, width=15, wraplength=150, font=('calibre', font_size_small, 'normal'))
@@ -167,14 +175,25 @@ class WorkConfigFrame(tk.Frame):
         self.keyboard_button = tk.Button(self.top_frame, text='Clavier', command=self.display_keyboard, height=2, width=8, font=('calibre', font_size_small, 'normal'))
         self.keyboard_button.pack(side=tk.RIGHT)
 
+    def onfocus(self, event):
+        if self.keyboard and isinstance(event.widget, tk.Entry):
+            self.keyboard.target = self.focus_get()
+
     def keyboard_destroyed(self, event):
-        self.focus()
         self.keyboard = None
 
-    def display_keyboard(self, event):
+    def display_keyboard(self, *args, **kwargs):
         if self.keyboard:
             self.keyboard.quit()
-        self.keyboard = Keyboard(event.widget)
+        target = None
+        if len(args) and isinstance(args[0], tk.Event) and isinstance(args[0].widget, tk.Entry):
+            target = args[0].widget
+        elif len(args) and isinstance(args[0], tk.Entry):
+            target = args[0]
+        elif self.focus_get() and isinstance(self.focus_get(), tk.Entry):
+            target = self.focus_get()
+
+        self.keyboard = Keyboard(target)
         self.keyboard.bind('<Destroy>', self.keyboard_destroyed)
         self.keyboard.mainloop()
 

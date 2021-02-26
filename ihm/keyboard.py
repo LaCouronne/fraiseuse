@@ -15,15 +15,15 @@ key_size = 10
 
 class Keyboard(tk.Tk):
 
-    def __init__(self, linked_input, *args, **kwargs):
+    def __init__(self, target, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
-
-        self.linked_input = linked_input
 
         self.title("Virtual Keyboard")
         self.attributes("-topmost", True)
         self.config(bg="black")
+
+        self.target = target
 
         last_index = 0
 
@@ -58,9 +58,11 @@ class Keyboard(tk.Tk):
         self.destroy()
 
     def type_key(self, key):
-        self.linked_input.insert(tk.INSERT, key)
+        if self.target:
+            self.target.insert(tk.INSERT, key)
 
     def del_key(self, *args, **kwargs):
-        if len(self.linked_input.get()) <= 0:
-            return
-        self.linked_input.delete(len(self.linked_input.get())-1, tk.END)
+        if self.target:
+            if len(self.target.get()) <= 0:
+                return
+            self.target.delete(len(self.target.get())-1, tk.END)
