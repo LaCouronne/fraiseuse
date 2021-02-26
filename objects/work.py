@@ -28,21 +28,31 @@ class Work(Loadable):
         self.motif_margin_y = margin.margin_y
 
     def validate(self):
+        #controles calculs
         if self.template.nb_copy * (self.template.width + 2 * self.margin.margin_x) > self.barrel.perimeter:
             return False, \
                    "Il y a une erreur au niveau de la largeur,\n le ombre de motif est trop élevé ou l\‘epaisseur est trop grande"
         if self.template.height > self.barrel.height + 2 * self.margin.margin_y :
             return False, \
                    "Il y a une erreur au niveau de la hauteur,\n les motifs sont plus longs que le dimètre du fut et de la marge"
-        if not self.margin.margin_y > 0.:
+        #controles valeurs individuelles
+        if not self.margin.margin_y >= 0.:
             return False, \
-                   "Il y a une erreur au niveau de la taille de la fraiseuse,\n celle ci doit être positive"
-        if not self.margin.margin_x > 0.:
+            "Il y a une erreur au niveau de la marge y, \n celle ci doit être positive"
+        if not self.margin.margin_x >= 0.:
             return False, \
-                   "Il y a une erreur au niveau de la marge X,\n celle ci doit être positive"
+                "Il y a une erreur au niveau de la marge X, \n celle ci doit être positive"
         if not self.drill.diameter > 0.:
             return False, \
-                   "Il y a une erreur au niveau de la marge y,\n celle ci doit être positive"
+                    "Il y a une erreur au niveau de la taille de la fraiseuse, \n celle ci doit être positive ou non nulle"
+        if not self.barrel.diameter > 0.:
+            return False, \
+                    "Il y a une erreur au niveau du diametre du barril, \n celle ci doit être positive et non nulle"
+        if not self.barrel.height > 0.:
+            return False, \
+                    "Il y a une erreur au niveau de la hauteur du barril, \n celle ci doit être positive et non nulle"
+
+
         return True, None
 
     @property

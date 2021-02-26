@@ -8,7 +8,6 @@ from controllers.hardware_controler import HardwareController
 from objects.work import Work
 
 progress = 0
-abort = False
 completed = False
 current_work = None
 emergency_stop = False
@@ -23,19 +22,17 @@ def do_work(callback=None, update_callback=None, check_delay=0.1):
     assert isinstance(current_work, Work)
 
     global progress
-    global abort
     global completed
     global emergency_stop
 
     progress = 0
-    abort = False
     completed = False
 
     def check_progress():
         while True:
 
             # Close thread if abort
-            if abort:
+            if emergency_stop:
                 break
 
             # Waith before next check
