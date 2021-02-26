@@ -142,7 +142,7 @@ class WorkConfigFrame(tk.Frame):
         margin_y_unit_label.grid(row=2, column=2)
         # Options
         self.save_name = tk.StringVar()
-        preview_btn = tk.Button(self.form_frame, text='Valider', command=self.preview,  height=5, width=10, font=('calibre', font_size_small, 'normal'))
+        preview_btn = tk.Button(self.form_frame, text='Valider', command=self.preview,  height=4, width=10, font=('calibre', font_size_small, 'normal'))
 
         preview_btn.grid(row=6, column=0, pady=form_grid_pady)
 
@@ -166,10 +166,10 @@ class WorkConfigFrame(tk.Frame):
         self.save_name_entry.bind('<FocusIn>', self.onfocus)
         self.save_name_entry.pack(side=tk.LEFT, padx=5)
 
-        self.delete_button = tk.Button(self.save_frame, text='Supprimer sauvegarde', command=self.delete_work, height=5, width=15, wraplength=150, font=('calibre', font_size_small, 'normal'))
+        self.delete_button = tk.Button(self.save_frame, text='Supprimer sauvegarde', command=self.delete_work, height=4, width=12, wraplength=130, font=('calibre', font_size_small, 'normal'))
         self.delete_button.pack(side=tk.RIGHT, padx=5)
 
-        self.save_button = tk.Button(self.save_frame, text='Nouvelle sauvegarde', command=self.save_work, height=5, width=15, wraplength=150, font=('calibre', font_size_small, 'normal'))
+        self.save_button = tk.Button(self.save_frame, text='Nouvelle sauvegarde', command=self.save_work, height=4, width=12, wraplength=130, font=('calibre', font_size_small, 'normal'))
         self.save_button.pack(side=tk.RIGHT, padx=5)
 
         self.keyboard_button = tk.Button(self.top_frame, text='Clavier', command=self.display_keyboard, height=2, width=8, font=('calibre', font_size_small, 'normal'))
@@ -178,6 +178,7 @@ class WorkConfigFrame(tk.Frame):
     def onfocus(self, event):
         if self.keyboard and isinstance(event.widget, tk.Entry):
             self.keyboard.target = self.focus_get()
+            self.keyboard.focus_set()
 
     def keyboard_destroyed(self, event):
         self.keyboard = None
