@@ -53,18 +53,7 @@ class Work(Loadable):
             return self.generate_matrix()
 
     def generate_matrix(self):
-        """Summary line.
 
-           Extended description of function.
-
-           Args:
-               arg1 (int): Description of arg1
-               arg2 (str): Description of arg2
-
-           Returns:
-               bool: Description of return value
-
-           """
         # Calculate drill/matrix accuracy
         pixel_size = self.drill.diameter
 

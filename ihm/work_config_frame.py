@@ -148,7 +148,7 @@ class WorkConfigFrame(tk.Frame):
         for save_name in save_manager.saves.keys():
             self.listbox.insert(tk.END, save_name)
 
-        self.save_name_entry = tk.Entry(self.save_frame, textvariable=self.save_name, font=('calibre', 10, 'normal'))
+        self.save_name_entry = tk.Entry(self.save_frame, textvariable=self.save_name, font=('calibre', 12, 'normal'))
         self.save_name_entry.bind('<FocusIn>', self.display_keyboard)
         self.save_name_entry.pack(side=tk.LEFT)
 
@@ -178,7 +178,6 @@ class WorkConfigFrame(tk.Frame):
         self.set_form_data(work)
 
     def get_work_from_parameters(self):
-
         # Create Work instance from form values
         barrel = Barrel(diameter=self.barrel_diameter_var.get(), height=self.barrel_height_var.get())
         template = Template(width=self.template_width_var.get(), height=self.template_height_var.get(), nb_copy=self.nb_copy_var.get())
@@ -215,10 +214,14 @@ class WorkConfigFrame(tk.Frame):
         if not self.save_name.get() or self.save_name.get() in save_manager.saves.keys():
             return
         self.keyboard.quit()
-        work_manager.current_work = self.get_work_from_parameters()
-        save_manager.save_work(self.save_name.get(), work_manager.current_work)
-        self.listbox.insert(tk.END, self.save_name.get())
-        self.save_name_entry.delete(0, 'end')
+        validated, message = work_manager.current_work.validate()
+        if not validated:
+            self.pop_up_error(message)
+        else:
+            work_manager.current_work = self.get_work_from_parameters()
+            save_manager.save_work(self.save_name.get(), work_manager.current_work)
+            self.listbox.insert(tk.END, self.save_name.get())
+            self.save_name_entry.delete(0, 'end')
 
     def delete_work(self):
 
@@ -226,6 +229,7 @@ class WorkConfigFrame(tk.Frame):
 
         save_manager.delete_save(save_name)
         self.listbox.delete(tk.ANCHOR)
+
 
     def display_work_image(self):
         self.master.display_image_frame()
