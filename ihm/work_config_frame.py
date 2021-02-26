@@ -166,10 +166,10 @@ class WorkConfigFrame(tk.Frame):
         self.save_name_entry.bind('<FocusIn>', self.onfocus)
         self.save_name_entry.pack(side=tk.LEFT, padx=5)
 
-        self.delete_button = tk.Button(self.save_frame, text='Supprimer sauvegarde', command=self.delete_work, height=4, width=12, wraplength=130, font=('calibre', font_size_small, 'normal'))
+        self.delete_button = tk.Button(self.save_frame, text='Supprimer sauvegarde', command=self.delete_work, height=4, width=10, wraplength=130, font=('calibre', font_size_small, 'normal'))
         self.delete_button.pack(side=tk.RIGHT, padx=5)
 
-        self.save_button = tk.Button(self.save_frame, text='Nouvelle sauvegarde', command=self.save_work, height=4, width=12, wraplength=130, font=('calibre', font_size_small, 'normal'))
+        self.save_button = tk.Button(self.save_frame, text='Nouvelle sauvegarde', command=self.save_work, height=4, width=10, wraplength=130, font=('calibre', font_size_small, 'normal'))
         self.save_button.pack(side=tk.RIGHT, padx=5)
 
         self.keyboard_button = tk.Button(self.top_frame, text='Clavier', command=self.display_keyboard, height=2, width=8, font=('calibre', font_size_small, 'normal'))
