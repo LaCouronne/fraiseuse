@@ -214,7 +214,8 @@ class WorkConfigFrame(tk.Frame):
     def save_work(self):
         if not self.save_name.get() or self.save_name.get() in save_manager.saves.keys():
             return
-        self.keyboard.quit()
+        if self.keyboard:
+            self.keyboard.quit()
         work_manager.current_work = self.get_work_from_parameters()
         save_manager.save_work(self.save_name.get(), work_manager.current_work)
         self.listbox.insert(tk.END, self.save_name.get())
