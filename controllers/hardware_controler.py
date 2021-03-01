@@ -150,7 +150,7 @@ class HardwareController:
     def move_y(self, vector):
         #1 turn - 2mm
         #1 turn : 6400 pulses
-        assert isinstance(vector, int)
+        #assert isinstance(vector, float)
         if vector == 0:
             return
         #move 6 mm up or down depending on the vector sign
@@ -193,7 +193,7 @@ class HardwareController:
         GPIO.output(self.motor_z.dir, vector_sign)
 
         # Send pulses for requested move
-        for _ in range(abs(vector) * pixel_pulse):
+        for _ in range(int(abs(vector) * pixel_pulse)):
             GPIO.output(self.motor_z.step, 1)
             time.sleep(motor_delay)
             GPIO.output(self.motor_z.step, 0)

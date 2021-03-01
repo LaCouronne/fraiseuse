@@ -52,10 +52,6 @@ class Work(Loadable):
             return False, \
                     "Il y a une erreur au niveau de la hauteur du barril, \n celle ci doit être positive et non nulle"
 
-        if not self.barrel.height.isdigit():
-            return False, \
-                   "La hauteur du barril n'est pas un nombre"
-
         return True, None
 
     @property

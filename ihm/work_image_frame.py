@@ -86,10 +86,15 @@ class WorkImageFrame(tk.Frame):
         column = self.validated_pixels - row * row_size
 
         for _ in range(delta):
-            self.color_matrix[row][column][0] = self.color_matrix[row][column][0] + validation_color_mask[0]
-            self.color_matrix[row][column][1] = self.color_matrix[row][column][1] + validation_color_mask[1]
-            self.color_matrix[row][column][2] = self.color_matrix[row][column][2] + validation_color_mask[2]
-
+            try:
+                self.color_matrix[row][column][0] = self.color_matrix[row][column][0] + validation_color_mask[0]
+                self.color_matrix[row][column][1] = self.color_matrix[row][column][1] + validation_color_mask[1]
+                self.color_matrix[row][column][2] = self.color_matrix[row][column][2] + validation_color_mask[2]
+            except IndexError as i:
+                print(i)
+                print("ligne, colonne: ")
+                print(row)
+                print(column)
             if column < row_size-1:
                 column += 1
             else:

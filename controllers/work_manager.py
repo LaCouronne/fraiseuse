@@ -95,6 +95,10 @@ def execute_work(work):
     global completed
     global emergency_stop
 
+    iterations = len(work.matrix) * len(work.matrix[0])
+    p = iterations // 100
+    r = iterations % 100
+
     hw_controller = HardwareController(work)
 
     direction = FORWARD
@@ -105,16 +109,17 @@ def execute_work(work):
 
     # Set drill to starting position
     hw_controller.move_y(-0.5)
-
+    print(len(work.matrix))
     # Pattern
     for lines in work.matrix:
-
         # forward or backward ?
         for pixel in (lines if direction == FORWARD else reversed(lines)):
+            pixel=(pixel[0]+pixel[1]+pixel[2])/3
             if emergency_stop:
                 emergency_stop = False
                 hw_controller.drill_off()
                 return
+
             # Same depth
             if previous_pixel == pixel:
                 hw_controller.move_x(direction)
@@ -130,7 +135,10 @@ def execute_work(work):
                 hw_controller.move_y(-1)
             previous_pixel = pixel
         direction = BACKWARD if direction == FORWARD else FORWARD
-
         hw_controller.move_z(1)
+        progress += p
 
+    progress += r
     hw_controller.drill_off()
+    completed = True
+

@@ -200,17 +200,58 @@ class WorkConfigFrame(tk.Frame):
     def get_work_from_parameters(self):
         # Create Work instance from form values
         string_barrel_diameter =str(self.barrel_diameter_var.get())
-        sting_barrel_height = str(self.barrel_height_var.get())
         try:
             float_barrel_diameter = float(string_barrel_diameter)
-            float_barrel_height= float(sting_barrel_height)
         except ValueError as e:
-           self.pop_up_error(self, str(e))
+            self.pop_up_error("Attention, le diamètre du fut n'est pas un nombre")
+            return None
+
+        sting_barrel_height = str(self.barrel_height_var.get())
+        try:
+            float_barrel_height = float(sting_barrel_height)
+        except ValueError as e:
+            self.pop_up_error("Attention, la hauteur du fut n'est pas un nombre")
+            return None
         barrel = Barrel(diameter=float_barrel_diameter, height=float_barrel_height)
 
-        template = Template(width=self.template_width_var.get(), height=self.template_height_var.get(), nb_copy=self.nb_copy_var.get())
-        drill = Drill(diameter=self.drill_diameter_var.get())
-        margin = Margin(margin_x=self.margin_x.get(), margin_y=self.margin_y.get())
+
+        try:
+            float_template_width_var = float(self.template_width_var.get())
+        except ValueError as e:
+            self.pop_up_error("Attention, la largeur du motif n'est pas un nombre")
+            return None
+        try:
+            float_template_height_var = float(self.template_height_var.get())
+        except ValueError as e:
+            self.pop_up_error("Attention, la hauteur du motif n'est pas un nombre")
+            return None
+        try:
+            int_nb_copy_var = int(self.nb_copy_var.get())
+        except ValueError as e:
+            self.pop_up_error("Attention, le nombre de motif n'est pas un nombre entier")
+            return None
+
+        template = Template(width=float_template_width_var, height=float_template_height_var, nb_copy=int_nb_copy_var)
+
+
+        try:
+            float_drill_diameter_var = float(self.drill_diameter_var.get())
+        except ValueError as e:
+            self.pop_up_error("Attention, la hauteur du fut n'est pas un nombre")
+            return None
+        drill = Drill(diameter=float_drill_diameter_var)
+
+        try:
+            float_margin_x = float(self.margin_x.get())
+        except ValueError as e:
+            self.pop_up_error("Attention, la marge x n'est pas un nombre")
+            return None
+        try:
+            float_margin_y = float(self.margin_y.get())
+        except ValueError as e:
+            self.pop_up_error("Attention, la marge y n'est pas un nombre")
+            return None
+        margin = Margin(margin_x=float_margin_x, margin_y=float_margin_x)
 
         work = Work(barrel=barrel, template=template, drill=drill, margin=margin)
 
@@ -232,6 +273,8 @@ class WorkConfigFrame(tk.Frame):
 
     def preview(self):
         work_manager.current_work = self.get_work_from_parameters()
+        if not work_manager.current_work:
+            return
         validated, message = work_manager.current_work.validate()
         if not validated:
             self.pop_up_error(message)
@@ -244,11 +287,15 @@ class WorkConfigFrame(tk.Frame):
         if self.keyboard:
             self.keyboard.quit()
         work_manager.current_work = self.get_work_from_parameters()
+        if not work_manager.current_work:
+            return
         validated, message = work_manager.current_work.validate()
         if not validated:
             self.pop_up_error(message)
         else:
             work_manager.current_work = self.get_work_from_parameters()
+            if not work_manager.current_work:
+                return
             save_manager.save_work(self.save_name.get(), work_manager.current_work)
             self.listbox.insert(tk.END, self.save_name.get())
             self.save_name_entry.delete(0, 'end')
