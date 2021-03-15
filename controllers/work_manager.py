@@ -113,7 +113,9 @@ def execute_work(work):
     # Pattern
     for lines in work.matrix:
         # forward or backward ?
+        print("line "+str(lines))
         for pixel in (lines if direction == FORWARD else reversed(lines)):
+            print("pixel"+str(pixel))
             pixel=(pixel[0]+pixel[1]+pixel[2])/3
             if emergency_stop:
                 emergency_stop = False
@@ -123,6 +125,7 @@ def execute_work(work):
             # Same depth
             if previous_pixel == pixel:
                 hw_controller.move_x(direction)
+                print("move")
 
             # down to up
             if previous_pixel > pixel:
@@ -134,10 +137,11 @@ def execute_work(work):
                 hw_controller.move_x(direction)
                 hw_controller.move_y(-1)
             previous_pixel = pixel
+        progress += p
+        print(progress)
         direction = BACKWARD if direction == FORWARD else FORWARD
         hw_controller.move_z(1)
-        progress += p
-
+        print("move z")
     progress += r
     hw_controller.drill_off()
     completed = True

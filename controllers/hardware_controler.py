@@ -17,7 +17,7 @@ ZStepPin = 24
 ZEnable = 12
 
 motor_pulse_cycle = 6400
-motor_delay = 0.001
+motor_delay = 0.0001
 
 try:
     import RPi.GPIO as GPIO
@@ -139,13 +139,14 @@ class HardwareController:
         diameter = self.work.barrel.diameter
         radius = diameter / 2
 
+        pixel_pulse = motor_pulse_cycle // 2
         # Send pulses for requested move
-        # for _ in range(abs(vector) * pixel_pulse):
-        #     GPIO.output(self.motor_z.step, 1)
-        #     time.sleep(motor_delay)
-        #     GPIO.output(self.motor_z.step, 0)
+        for _ in range(abs(vector) * pixel_pulse):
+             GPIO.output(self.motor_z.step, 1)
+             time.sleep(motor_delay)
+             GPIO.output(self.motor_z.step, 0)
 
-        pass
+
 
     def move_y(self, vector):
         #1 turn - 2mm
@@ -154,21 +155,18 @@ class HardwareController:
         if vector == 0:
             return
         #move 6 mm up or down depending on the vector sign
-        pixels_pulses = motor_pulse_cycle * 6
+        pixels_pulses = motor_pulse_cycle * 3
 
         #Vector sign + => cw    - => ccw
         vector_sign = 1 if vector > 0 else 0
-        # for _ in range(abs(vector) * pixel_pulse):
-        #     pass
-        #
-        #     GPIO.output(self.motor_y.step, 1)
-        #     time.sleep(motor_delay)
-        #     GPIO.output(self.motor_y.step, 0)
+        for _ in range(math.floor((vector) * pixels_pulses)):
+             GPIO.output(self.motor_y.step, 1)
+             time.sleep(motor_delay)
+             GPIO.output(self.motor_y.step, 0)
 
-        pass
+
 
     def move_z(self, vector):
-
         assert isinstance(vector, int)
         if vector == 0:
             return

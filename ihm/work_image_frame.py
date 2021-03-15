@@ -43,7 +43,6 @@ class WorkImageFrame(tk.Frame):
     def display_matrix_preview(self, matrix):
 
         tmp = matrix.copy()
-
         color_mask = (100, 100, 100)
 
         for row in range(len(matrix)):
