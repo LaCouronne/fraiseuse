@@ -110,6 +110,12 @@ class Motor:
         #moteurs en flottement pour pouvoir le positionner
         GPIO.output(en_pin, GPIO.HIGH)
 
+    def enable_motor(self):
+        GPIO.output(self.en, GPIO.HIGH)
+
+    def disable_motor(self):
+        GPIO.output(self.en,GPIO.LOW)
+
 
 class HardwareController:
 
@@ -123,14 +129,21 @@ class HardwareController:
         self.motor_y = Motor(YDir, YStepPin, YEnable)
         self.motor_z = Motor(ZDir, ZStepPin, ZEnable)
 
+    def lock_motors(self):
+        self.motor_z.enable_motor()
+        self.motor_y.enable_motor()
+        self.motor_x.enable_motor()
+
+    def unlock_motors(self):
+        self.motor_z.disable_motor()
+        self.motor_y.disable_motor()
+        self.motor_x.disable_motor()
+
     def drill_on(self):
         GPIO.output(pin_fraise, GPIO.HIGH)
-        pass
 
     def drill_off(self):
         GPIO.output(pin_fraise, GPIO.LOW)
-
-        pass
 
     def move_x(self, vector):
         # 1 turn - 2mm
