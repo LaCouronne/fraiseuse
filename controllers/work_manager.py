@@ -108,6 +108,7 @@ def execute_work(work):
     hw_controller.drill_on()
 
     # Set drill to starting position
+    hw_controller.lock_motors()
     hw_controller.move_y(-0.5)
     print(len(work.matrix))
     # Pattern
@@ -120,6 +121,7 @@ def execute_work(work):
             if emergency_stop:
                 emergency_stop = False
                 hw_controller.drill_off()
+                hw_controller.unlock_motors()
                 return
 
             # Same depth
@@ -144,5 +146,6 @@ def execute_work(work):
         print("move z")
     progress += r
     hw_controller.drill_off()
+    hw_controller.unlock_motors()
     completed = True
 
